@@ -161,7 +161,7 @@ export default function PostPrompt() {
                           type="number"
                         />
                         <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
-                          <span className="material-symbols-outlined text-primary text-xl fill-[1]">token</span>
+                          <span className="material-symbols-outlined text-primary text-xl fill-[1]">monetization_on</span>
                         </div>
                       </div>
                     </div>
@@ -242,7 +242,7 @@ export default function PostPrompt() {
                   )}
                   {/* Floating Price */}
                   <div className="absolute top-4 right-4 glass-effect px-3 py-1.5 rounded-lg flex items-center gap-1.5 shadow-sm">
-                    <span className="material-symbols-outlined text-primary text-[18px] fill-[1]">token</span>
+                    <span className="material-symbols-outlined text-primary text-[18px] fill-[1]">monetization_on</span>
                     <span className="text-sm font-bold text-slate-800">{formData.price || '0'} Credits</span>
                   </div>
                   {/* Category Badge */}

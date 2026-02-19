@@ -122,24 +122,15 @@ export default function Home() {
   const [showSidebar, setShowSidebar] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [selectedPriceRange, setSelectedPriceRange] = useState<string>('all');
-  const [minRating, setMinRating] = useState<number>(0);
-  const [selectedReliability, setSelectedReliability] = useState<string[]>([]);
   const [selectedModels, setSelectedModels] = useState<string[]>([]);
+  const [selectedReliability, setSelectedReliability] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState('Relevant');
 
   // Filtering Logic
   const filteredPrompts = promptData.filter(prompt => {
     if (selectedCategories.length > 0 && !selectedCategories.includes(prompt.category)) return false;
     if (selectedModels.length > 0 && !selectedModels.includes(prompt.model)) return false;
-    if (selectedReliability.length > 0 && !selectedReliability.includes(prompt.reliabilityType)) return false;
-    if (selectedPriceRange !== 'all') {
-      if (selectedPriceRange === 'free' && prompt.price > 0) return false;
-      if (selectedPriceRange === '1-10' && (prompt.price < 1 || prompt.price > 10)) return false;
-      if (selectedPriceRange === '11-25' && (prompt.price < 11 || prompt.price > 25)) return false;
-      if (selectedPriceRange === '25+' && prompt.price <= 25) return false;
-    }
-    if (prompt.rating < minRating) return false;
+    if (selectedReliability.length > 0 && !selectedReliability.includes(prompt.reliability)) return false;
     if (searchQuery && !prompt.title.toLowerCase().includes(searchQuery.toLowerCase())) return false;
     return true;
   }).sort((a, b) => {
@@ -209,51 +200,37 @@ export default function Home() {
                 </div>
               </div>
 
+              {/* Model */}
+              <div>
+                <h4 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">Model</h4>
+                <div className="space-y-3">
+                  {['MIDJOURNEY V8', 'STABLE DIFFUSION 3', 'GPT-5 TURBO', 'DALL-E 4', 'MIDJOURNEY V7', 'CLAUDE 4 OPUS'].map((model) => (
+                    <label key={model} className="flex items-center gap-3 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={selectedModels.includes(model)}
+                        onChange={() => toggleModel(model)}
+                        className="w-5 h-5 text-primary border-slate-300 rounded focus:ring-primary"
+                      />
+                      <span className="text-slate-600 font-medium">{model}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
               {/* Reliability */}
               <div>
                 <h4 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">Reliability</h4>
                 <div className="space-y-3">
-                  <label className="flex items-center gap-3 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={selectedReliability.includes('emerald')}
-                      onChange={() => toggleReliability('emerald')}
-                      className="w-5 h-5 text-emerald-500 border-slate-300 rounded"
-                    />
-                    <span className="text-slate-600 font-medium">Emerald Tier (98%+)</span>
-                  </label>
-                  <label className="flex items-center gap-3 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={selectedReliability.includes('blue')}
-                      onChange={() => toggleReliability('blue')}
-                      className="w-5 h-5 text-blue-500 border-slate-300 rounded"
-                    />
-                    <span className="text-slate-600 font-medium">Verified Blue</span>
-                  </label>
-                </div>
-              </div>
-
-              {/* Price Range */}
-              <div>
-                <h4 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">Price Range</h4>
-                <div className="space-y-3">
-                  {[
-                    { label: 'All Prices', value: 'all' },
-                    { label: 'Free', value: 'free' },
-                    { label: '1-10 Credits', value: '1-10' },
-                    { label: '11-25 Credits', value: '11-25' },
-                    { label: '25+ Credits', value: '25+' }
-                  ].map((range) => (
-                    <label key={range.value} className="flex items-center gap-3 cursor-pointer">
+                  {['98% Reliability', '95% Reliability', '100% Reliable', '92% Reliability', '97% Reliability'].map((rel) => (
+                    <label key={rel} className="flex items-center gap-3 cursor-pointer">
                       <input
-                        type="radio"
-                        name="mobile-price"
-                        checked={selectedPriceRange === range.value}
-                        onChange={() => setSelectedPriceRange(range.value)}
-                        className="w-5 h-5 text-primary border-slate-300 focus:ring-primary"
+                        type="checkbox"
+                        checked={selectedReliability.includes(rel)}
+                        onChange={() => toggleReliability(rel)}
+                        className="w-5 h-5 text-primary border-slate-300 rounded focus:ring-primary"
                       />
-                      <span className="text-slate-600 font-medium">{range.label}</span>
+                      <span className="text-slate-600 font-medium">{rel}</span>
                     </label>
                   ))}
                 </div>
@@ -304,81 +281,50 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Reliability Tier */}
+              {/* Model */}
               <div>
-                <h4 className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-4">Reliability</h4>
+                <h4 className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-4">Model</h4>
                 <div className="space-y-3">
-                  <label className="flex items-center gap-4 cursor-pointer group">
-                    <input
-                      type="checkbox"
-                      checked={selectedReliability.includes('emerald')}
-                      onChange={() => toggleReliability('emerald')}
-                      className="w-5 h-5 text-emerald-500 border-slate-300 rounded focus:ring-emerald-500"
-                    />
-                    <span className="text-sm text-slate-600 group-hover:text-slate-900">Emerald Tier (98%+)</span>
-                  </label>
-                  <label className="flex items-center gap-4 cursor-pointer group">
-                    <input
-                      type="checkbox"
-                      checked={selectedReliability.includes('blue')}
-                      onChange={() => toggleReliability('blue')}
-                      className="w-5 h-5 text-blue-500 border-slate-300 rounded focus:ring-blue-500"
-                    />
-                    <span className="text-sm text-slate-600 group-hover:text-slate-900">Verified Blue</span>
-                  </label>
-                </div>
-              </div>
-
-              {/* Price Range */}
-              <div>
-                <h4 className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-4">Price Range</h4>
-                <div className="space-y-3">
-                  {[
-                    { label: 'All', value: 'all' },
-                    { label: 'Free', value: 'free' },
-                    { label: '1–10 Credits', value: '1-10' },
-                    { label: '11–25 Credits', value: '11-25' },
-                    { label: '25+ Credits', value: '25+' }
-                  ].map((range) => (
-                    <label key={range.value} className="flex items-center gap-4 cursor-pointer group">
+                  {['MIDJOURNEY V8', 'STABLE DIFFUSION 3', 'GPT-5 TURBO', 'DALL-E 4', 'MIDJOURNEY V7', 'CLAUDE 4 OPUS'].map((model) => (
+                    <label key={model} className="flex items-center gap-4 cursor-pointer group">
                       <input
-                        type="radio"
-                        name="price"
-                        checked={selectedPriceRange === range.value}
-                        onChange={() => setSelectedPriceRange(range.value)}
-                        className="w-5 h-5 text-primary border-slate-300 focus:ring-primary"
+                        type="checkbox"
+                        checked={selectedModels.includes(model)}
+                        onChange={() => toggleModel(model)}
+                        className="w-5 h-5 text-primary border-slate-300 rounded focus:ring-primary"
                       />
-                      <span className="text-sm text-slate-600 group-hover:text-slate-900">{range.label}</span>
+                      <span className={`text-sm transition-colors ${selectedModels.includes(model) ? 'text-primary font-semibold' : 'text-slate-600 group-hover:text-slate-900'}`}>{model}</span>
                     </label>
                   ))}
                 </div>
               </div>
 
-              {/* Rating */}
+              {/* Reliability */}
               <div>
-                <h4 className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-4">Min Rating</h4>
-                <div className="grid grid-cols-2 gap-2">
-                  {[4.5, 4.0, 3.5, 0].map((rate) => (
-                    <button
-                      key={rate}
-                      onClick={() => setMinRating(rate)}
-                      className={`py-2 rounded-md text-[10px] font-bold border transition-all ${minRating === rate ? 'bg-primary text-white border-primary' : 'bg-white text-slate-400 border-slate-200 hover:border-primary/50'}`}
-                    >
-                      {rate === 0 ? 'Any' : `${rate}⭐`}
-                    </button>
+                <h4 className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-4">Reliability</h4>
+                <div className="space-y-3">
+                  {['98% Reliability', '95% Reliability', '100% Reliable', '92% Reliability', '97% Reliability'].map((rel) => (
+                    <label key={rel} className="flex items-center gap-4 cursor-pointer group">
+                      <input
+                        type="checkbox"
+                        checked={selectedReliability.includes(rel)}
+                        onChange={() => toggleReliability(rel)}
+                        className="w-5 h-5 text-primary border-slate-300 rounded focus:ring-primary"
+                      />
+                      <span className={`text-sm transition-colors ${selectedReliability.includes(rel) ? 'text-primary font-semibold' : 'text-slate-600 group-hover:text-slate-900'}`}>{rel}</span>
+                    </label>
                   ))}
                 </div>
               </div>
 
+              
               {/* Clear Filters */}
-              {(selectedCategories.length > 0 || selectedReliability.length > 0 || selectedPriceRange !== 'all' || minRating > 0 || searchQuery) && (
+              {(selectedCategories.length > 0 || selectedModels.length > 0 || selectedReliability.length > 0 || searchQuery) && (
                 <button
                   onClick={() => {
                     setSelectedCategories([]);
-                    setSelectedPriceRange('all');
-                    setMinRating(0);
-                    setSelectedReliability([]);
                     setSelectedModels([]);
+                    setSelectedReliability([]);
                     setSearchQuery('');
                   }}
                   className="w-full py-3 rounded-lg text-xs font-bold text-red-500 border border-red-200 hover:bg-red-50 transition-all"
@@ -486,10 +432,10 @@ export default function Home() {
               </div>
 
               {filteredPrompts.length > 0 ? (
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-2 xs:gap-3 sm:gap-4">
                   {filteredPrompts.map((prompt) => (
                     <Link key={prompt.id} href={`/prompt/${prompt.id}`} className="block">
-                      <div className="prompt-card group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-slate-100 flex flex-col h-full">
+                      <div className="prompt-card group bg-white rounded-lg xs:rounded-xl sm:rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-slate-100 flex flex-col h-full">
                         {/* Card Image Area */}
                         <div className="relative aspect-square overflow-hidden bg-slate-900">
                           <div
@@ -498,48 +444,45 @@ export default function Home() {
                           />
 
                           {/* Top Right model Badge */}
-                          <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-sm border border-white/20">
-                            <div className="size-2 rounded-full bg-indigo-500" />
-                            <span className="text-[10px] font-black tracking-tighter text-slate-700 uppercase">{(prompt as any).model}</span>
+                          <div className="absolute top-1.5 xs:top-2 sm:top-3 right-1.5 xs:right-2 sm:right-3 bg-white/90 backdrop-blur-md px-1.5 xs:px-2 sm:px-3 py-0.8 xs:py-1 sm:py-1.5 rounded-full flex items-center gap-0.8 xs:gap-1 sm:gap-1.5 shadow-sm border border-white/20">
+                            <div className="size-1 xs:size-1.5 sm:size-2 rounded-full bg-indigo-500" />
+                            <span className="text-[6px] xs:text-[8px] sm:text-[10px] font-black tracking-tighter text-slate-700 uppercase hidden xs:inline sm:inline">{(prompt as any).model}</span>
+                            <span className="text-[6px] xs:text-[8px] sm:text-[10px] font-black tracking-tighter text-slate-700 uppercase xs:hidden sm:hidden">{(prompt as any).model?.split(' ')[0] || 'AI'}</span>
                           </div>
 
                           {/* Bottom Left Category Badge */}
-                          <div className="absolute bottom-4 left-4 bg-primary px-4 py-1.5 rounded-lg shadow-lg">
-                            <span className="text-[11px] font-bold text-white uppercase tracking-wider">{prompt.category}</span>
+                          <div className="absolute bottom-2 xs:bottom-3 sm:bottom-4 left-2 xs:left-3 sm:left-4 bg-primary px-1.5 xs:px-2.5 sm:px-4 py-0.6 xs:py-1 sm:py-1.5 rounded-lg shadow-lg">
+                            <span className="text-[7px] xs:text-[9px] sm:text-[11px] font-bold text-white uppercase tracking-wider">{prompt.category}</span>
                           </div>
                         </div>
 
                         {/* Card Content Area */}
-                        <div className="p-5 flex flex-col flex-1">
+                        <div className="p-2 xs:p-3 sm:p-4 md:p-5 flex flex-col flex-1">
                           {/* Title & Price Row */}
                           <div className="flex justify-between items-start mb-2">
-                            <h4 className="font-extrabold text-lg text-slate-800 leading-tight group-hover:text-primary transition-colors flex-1 line-clamp-1">
+                            <h4 className="font-extrabold text-[10px] xs:text-sm sm:text-base md:text-lg text-slate-800 leading-tight group-hover:text-primary transition-colors flex-1 line-clamp-1 xs:line-clamp-2 sm:line-clamp-2">
                               {prompt.title}
                             </h4>
                           </div>
 
                           {/* Description Text */}
-                          <p className="text-slate-400 text-sm leading-relaxed line-clamp-2 mb-6 font-medium">
+                          <p className="text-slate-400 text-[9px] xs:text-xs sm:text-sm leading-relaxed line-clamp-1 xs:line-clamp-2 sm:line-clamp-2 mb-2 xs:mb-3 sm:mb-6 font-medium">
                             {(prompt as any).description || 'Highly detailed prompt for photorealistic architectural glass and neon elements...'}
                           </p>
 
                           {/* Footer Stats & Credit Price */}
-                          <div className="mt-auto pt-4 border-t border-slate-50 flex items-center justify-between">
-                            <div className="flex items-center gap-3 text-slate-400">
-                              <div className="flex items-center gap-1 hover:text-indigo-500 transition-colors cursor-default">
-                                <span className="material-symbols-outlined text-[14px]">thumb_up</span>
-                                <span className="text-[10px] font-bold leading-none">{(prompt as any).likes || '1.2k'}</span>
+                          <div className="mt-auto pt-1.5 xs:pt-2 sm:pt-4 border-t border-slate-50">
+                            <div className="flex items-center justify-between gap-2">
+                              <div className="flex items-center gap-2 text-slate-400">
+                                <span className="material-symbols-outlined text-[9px] xs:text-[12px] sm:text-[14px]">thumb_up</span>
+                                <span className="text-[6px] xs:text-[8px] sm:text-[10px] font-bold leading-none">{(prompt as any).likes || '1.2k'}</span>
+                                <span className="material-symbols-outlined text-[9px] xs:text-[12px] sm:text-[14px]">download</span>
+                                <span className="text-[6px] xs:text-[8px] sm:text-[10px] font-bold leading-none">{(prompt as any).downloads || '840'}</span>
                               </div>
-                              <div className="flex items-center gap-1 hover:text-indigo-500 transition-colors cursor-default">
-                                <span className="material-symbols-outlined text-[14px]">download</span>
-                                <span className="text-[10px] font-bold leading-none">{(prompt as any).downloads || '840'}</span>
+                              <div className="flex items-center gap-1 bg-primary/10 px-2 py-1 rounded-full flex-shrink-0">
+                                <span className="material-symbols-outlined text-primary text-[9px] xs:text-[11px] sm:text-[13px] fill-[1]">monetization_on</span>
+                                <span className="text-[7px] xs:text-[9px] sm:text-[11px] font-black text-primary">{prompt.price}</span>
                               </div>
-                            </div>
-
-                            {/* Credits - Made more proportional */}
-                            <div className="flex items-center gap-1 py-1.5 px-3 rounded-full group-hover:bg-slate-50 transition-colors">
-                              <span className="material-symbols-outlined text-primary text-[16px] fill-[1]">token</span>
-                              <span className="text-sm font-black text-primary">{prompt.price} Credits</span>
                             </div>
                           </div>
                         </div>
@@ -554,10 +497,8 @@ export default function Home() {
                   <button
                     onClick={() => {
                       setSelectedCategories([]);
-                      setSelectedPriceRange('all');
-                      setMinRating(0);
-                      setSelectedReliability([]);
                       setSelectedModels([]);
+                      setSelectedReliability([]);
                       setSearchQuery('');
                     }}
                     className="mt-4 text-primary font-bold hover:underline"

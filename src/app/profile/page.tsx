@@ -201,39 +201,39 @@ export default function Profile() {
                         </div>
 
                         {/* Prompt Grid */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
                             {/* Upload New Prompt Card */}
-                            <Link href="/post-prompt" className="border-2 border-dashed border-primary/20 rounded-2xl flex flex-col items-center justify-center p-8 group hover:border-primary/50 transition-all cursor-pointer bg-primary/5">
-                                <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-all">
-                                    <span className="material-symbols-outlined text-primary text-3xl">add</span>
+                            <Link href="/post-prompt" className="border-2 border-dashed border-primary/20 rounded-xl sm:rounded-2xl flex flex-col items-center justify-center p-6 sm:p-8 group hover:border-primary/50 transition-all cursor-pointer bg-primary/5">
+                                <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-primary/10 flex items-center justify-center mb-3 sm:mb-4 group-hover:bg-primary/20 transition-all">
+                                    <span className="material-symbols-outlined text-primary text-2xl sm:text-3xl">add</span>
                                 </div>
-                                <p className="font-bold text-slate-400 group-hover:text-primary transition-colors">Upload New Prompt</p>
+                                <p className="font-bold text-slate-400 group-hover:text-primary transition-colors text-sm sm:text-base">Upload New Prompt</p>
                             </Link>
                             {userPrompts.map((prompt) => (
-                                <div key={prompt.id} className="group bg-white rounded-2xl overflow-hidden border border-slate-100 hover:border-primary/40 transition-all">
+                                <div key={prompt.id} className="group bg-white rounded-xl sm:rounded-2xl overflow-hidden border border-slate-100 hover:border-primary/40 transition-all">
                                     <div className="aspect-video relative overflow-hidden">
                                         <div
                                             className="w-full h-full bg-cover bg-center group-hover:scale-110 transition-transform duration-500"
                                             style={{ backgroundImage: `url(${prompt.image})` }}
                                         />
-                                        <div className="absolute top-3 left-3 flex gap-2">
-                                            <span className="bg-black/60 backdrop-blur-md text-[10px] text-white font-bold px-2 py-1 rounded uppercase tracking-wider">
+                                        <div className="absolute top-2 sm:top-3 left-2 sm:left-3 flex gap-2">
+                                            <span className="bg-black/60 backdrop-blur-md text-[8px] sm:text-[10px] text-white font-bold px-1.5 sm:px-2 py-0.5 sm:py-1 rounded uppercase tracking-wider">
                                                 {prompt.category}
                                             </span>
                                         </div>
                                     </div>
-                                    <div className="p-5">
-                                        <h4 className="font-bold text-lg mb-2 line-clamp-1 group-hover:text-primary transition-colors">{prompt.title}</h4>
-                                        <p className="text-slate-500 text-sm mb-4 line-clamp-2 leading-relaxed">{prompt.description}</p>
-                                        <div className="flex items-center justify-between pt-4 border-t border-slate-100">
+                                    <div className="p-3 sm:p-4 md:p-5">
+                                        <h4 className="font-bold text-sm sm:text-base md:text-lg mb-2 line-clamp-1 sm:line-clamp-2 group-hover:text-primary transition-colors">{prompt.title}</h4>
+                                        <p className="text-slate-500 text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-1 sm:line-clamp-2 leading-relaxed">{prompt.description}</p>
+                                        <div className="flex items-center justify-between pt-2 sm:pt-4 border-t border-slate-100">
                                             <div className="flex items-center gap-1">
-                                                <span className="material-symbols-outlined text-amber-400 text-sm">star</span>
-                                                <span className="text-sm font-bold">{prompt.rating}</span>
+                                                <span className="material-symbols-outlined text-amber-400 text-sm sm:text-base">star</span>
+                                                <span className="text-sm sm:text-base font-bold">{prompt.rating}</span>
                                                 <span className="text-xs text-slate-500 ml-1">({prompt.reviews})</span>
                                             </div>
                                             <div className="flex items-center gap-1">
-                                                <span className="text-lg font-bold text-primary">{prompt.price}</span>
-                                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">Credits</span>
+                                                <span className="text-base sm:text-lg font-bold text-primary">{prompt.price}</span>
+                                                <span className="text-[8px] sm:text-[10px] font-bold text-slate-400 uppercase tracking-tighter">Credits</span>
                                             </div>
                                         </div>
                                     </div>

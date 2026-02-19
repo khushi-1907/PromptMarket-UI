@@ -8,6 +8,9 @@
     --radius-lg: 0.5rem;
     --radius-xl: 0.75rem;
     --radius-2xl: 1rem;
+    
+    /* Custom breakpoints */
+    --breakpoint-xs: 475px;
 }
 
 body {
