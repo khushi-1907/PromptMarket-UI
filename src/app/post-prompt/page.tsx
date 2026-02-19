@@ -31,37 +31,18 @@ export default function PostPrompt() {
   };
 
   return (
-    <div className="bg-background-light text-[#0d101b] antialiased min-h-screen">
-      {/* Navigation */}
-      <nav className="sticky top-0 z-50 w-full glass-effect border-b border-white/20">
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="bg-primary p-1.5 rounded-lg text-white">
-              <span className="material-symbols-outlined text-2xl block">electric_bolt</span>
-            </div>
-            <h1 className="text-xl font-bold tracking-tight">PromptMarket</h1>
-          </Link>
-          <div className="hidden md:flex items-center gap-10">
-            <Link className="text-sm font-medium hover:text-primary transition-colors" href="/">Marketplace</Link>
-            <Link className="text-sm font-medium hover:text-primary transition-colors" href="#">My Prompts</Link>
-            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-              <span className="material-symbols-outlined text-primary text-xl">person</span>
-            </div>
-          </div>
-        </div>
-      </nav>
-
-      <main className="max-w-7xl mx-auto px-6 py-10">
-        <div className="flex flex-col lg:flex-row gap-12">
+    <>
+      <main className="max-w-7xl mx-auto px-4 py-8">
+        <div className="flex flex-col lg:flex-row gap-8">
           {/* Form Section */}
-          <div className="flex-1 max-w-3xl">
-            <header className="mb-12">
-              <h1 className="text-4xl font-bold tracking-tight mb-3">Create New Prompt</h1>
-              <p className="text-slate-500 text-lg font-light">Share your creative engineering and earn credits from the community.</p>
+          <div className="flex-1 max-w-4xl">
+            <header className="mb-8">
+              <h1 className="text-3xl font-bold tracking-tight mb-2">Create New Prompt</h1>
+              <p className="text-slate-500 text-base font-light">Share your creative engineering and earn credits from the community.</p>
             </header>
 
             {/* Stepper */}
-            <div className="flex items-center mb-12">
+            <div className="flex items-center mb-8">
               <div className="flex items-center text-primary group cursor-pointer">
                 <div className="w-10 h-10 rounded-2xl bg-primary text-white flex items-center justify-center font-bold shadow-lg shadow-primary/20">1</div>
                 <div className="ml-4">
@@ -69,7 +50,7 @@ export default function PostPrompt() {
                   <p className="font-bold text-sm">Basics</p>
                 </div>
               </div>
-              <div className="flex-1 h-[2px] bg-slate-200 mx-8"></div>
+              <div className="flex-1 h-[2px] bg-slate-200 mx-6"></div>
               <div className="flex items-center text-slate-400">
                 <div className="w-10 h-10 rounded-2xl border-2 border-slate-200 flex items-center justify-center font-bold">2</div>
                 <div className="ml-4">
@@ -77,7 +58,7 @@ export default function PostPrompt() {
                   <p className="font-bold text-sm">Architecture</p>
                 </div>
               </div>
-              <div className="flex-1 h-[2px] bg-slate-200 mx-8"></div>
+              <div className="flex-1 h-[2px] bg-slate-200 mx-6"></div>
               <div className="flex items-center text-slate-400">
                 <div className="w-10 h-10 rounded-2xl border-2 border-slate-200 flex items-center justify-center font-bold">3</div>
                 <div className="ml-4">
@@ -88,22 +69,22 @@ export default function PostPrompt() {
             </div>
 
             {/* Form Content */}
-            <form className="space-y-10">
+            <form className="space-y-8">
               {/* Step 1: General Info */}
-              <div className="space-y-8">
-                <div className="grid grid-cols-1 gap-8">
+              <div className="space-y-6">
+                <div className="grid grid-cols-1 gap-6">
                   <div className="group">
                     <label className="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-3 group-focus-within:text-primary transition-colors">Prompt Title</label>
                     <input
                       name="title"
                       value={formData.title}
                       onChange={handleChange}
-                      className="w-full px-6 py-4 bg-white border border-slate-200 rounded-2xl focus:ring-4 focus:ring-primary/5 focus:border-primary outline-none transition-all font-medium text-slate-800 placeholder:text-slate-300"
+                      className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-4 focus:ring-primary/5 focus:border-primary outline-none transition-all font-medium text-slate-800 placeholder:text-slate-300"
                       placeholder="e.g. Ultra-Realistic Architecture Render"
                       type="text"
                     />
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label className="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-3">AI Platform</label>
                       <div className="relative">
@@ -111,7 +92,7 @@ export default function PostPrompt() {
                           name="platform"
                           value={formData.platform}
                           onChange={handleChange}
-                          className="w-full px-6 py-4 bg-white border border-slate-200 rounded-2xl focus:ring-4 focus:ring-primary/5 focus:border-primary outline-none appearance-none font-medium text-slate-800"
+                          className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-4 focus:ring-primary/5 focus:border-primary outline-none appearance-none font-medium text-slate-800"
                         >
                           <option>ChatGPT</option>
                           <option>Midjourney</option>
@@ -119,7 +100,7 @@ export default function PostPrompt() {
                           <option>Stable Diffusion</option>
                           <option>Claude</option>
                         </select>
-                        <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">expand_more</span>
+                        <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">expand_more</span>
                       </div>
                     </div>
                     <div>
@@ -129,7 +110,7 @@ export default function PostPrompt() {
                           name="category"
                           value={formData.category}
                           onChange={handleChange}
-                          className="w-full px-6 py-4 bg-white border border-slate-200 rounded-2xl focus:ring-4 focus:ring-primary/5 focus:border-primary outline-none appearance-none font-medium text-slate-800"
+                          className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-4 focus:ring-primary/5 focus:border-primary outline-none appearance-none font-medium text-slate-800"
                         >
                           <option>Illustration</option>
                           <option>Photography</option>
@@ -137,14 +118,14 @@ export default function PostPrompt() {
                           <option>Programming</option>
                           <option>Marketing</option>
                         </select>
-                        <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">expand_more</span>
+                        <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">expand_more</span>
                       </div>
                     </div>
                   </div>
                 </div>
 
                 {/* Architecture Description */}
-                <div className="pt-10 border-t border-slate-100 space-y-8">
+                <div className="pt-8 border-t border-slate-100 space-y-6">
                   <div>
                     <label className="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-3">Engineered Prompt Text</label>
                     <div className="relative">
@@ -152,10 +133,10 @@ export default function PostPrompt() {
                         name="promptText"
                         value={formData.promptText}
                         onChange={handleChange}
-                        className="w-full px-6 py-4 bg-white border border-slate-200 rounded-2xl focus:ring-4 focus:ring-primary/5 focus:border-primary outline-none font-mono text-sm leading-relaxed min-h-[160px]"
+                        className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-4 focus:ring-primary/5 focus:border-primary outline-none font-mono text-sm leading-relaxed min-h-[140px]"
                         placeholder="Paste your meticulously crafted prompt architecture here..."
                       ></textarea>
-                      <div className="absolute top-4 right-4">
+                      <div className="absolute top-3 right-3">
                         <span className="material-symbols-outlined text-slate-200 text-2xl">code</span>
                       </div>
                     </div>
@@ -167,8 +148,8 @@ export default function PostPrompt() {
                 </div>
 
                 {/* Pricing & Assets */}
-                <div className="pt-10 border-t border-slate-100 space-y-8">
-                  <div className="grid md:grid-cols-2 gap-8">
+                <div className="pt-8 border-t border-slate-100 space-y-6">
+                  <div className="grid md:grid-cols-2 gap-6">
                     <div>
                       <label className="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-3">Credit Price</label>
                       <div className="relative group">
@@ -176,10 +157,10 @@ export default function PostPrompt() {
                           name="price"
                           value={formData.price}
                           onChange={handleChange}
-                          className="w-full px-6 py-4 pl-14 bg-white border border-slate-200 rounded-2xl focus:ring-4 focus:ring-primary/5 focus:border-primary outline-none font-bold text-slate-800 text-lg"
+                          className="w-full px-4 py-3 pl-12 bg-white border border-slate-200 rounded-xl focus:ring-4 focus:ring-primary/5 focus:border-primary outline-none font-bold text-slate-800 text-base"
                           type="number"
                         />
-                        <div className="absolute inset-y-0 left-6 flex items-center pointer-events-none">
+                        <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
                           <span className="material-symbols-outlined text-primary text-xl fill-[1]">token</span>
                         </div>
                       </div>
@@ -196,7 +177,7 @@ export default function PostPrompt() {
                         />
                         <label 
                           htmlFor="image-upload"
-                          className="border-2 border-dashed border-slate-200 rounded-3xl p-4 text-center bg-white/50 hover:border-primary/50 transition-all cursor-pointer group h-[60px] flex items-center justify-center gap-3"
+                          className="border-2 border-dashed border-slate-200 rounded-2xl p-3 text-center bg-white/50 hover:border-primary/50 transition-all cursor-pointer group h-[50px] flex items-center justify-center gap-2"
                         >
                           {formData.image ? (
                             <>
@@ -217,13 +198,13 @@ export default function PostPrompt() {
               </div>
 
               {/* Footer Actions */}
-              <div className="flex items-center justify-between pt-10 border-t border-slate-100">
-                <button className="px-8 py-4 font-bold text-slate-400 hover:text-slate-800 transition-colors flex items-center gap-2 text-sm uppercase tracking-widest" type="button">
+              <div className="flex items-center justify-between pt-8 border-t border-slate-100">
+                <button className="px-6 py-3 font-bold text-slate-400 hover:text-slate-800 transition-colors flex items-center gap-2 text-sm uppercase tracking-widest" type="button">
                   <span className="material-symbols-outlined text-xl">arrow_back</span>
                   Save Draft
                 </button>
                 <div className="flex gap-4">
-                  <button className="px-10 py-4 bg-primary text-white font-bold rounded-2xl hover:bg-blue-700 shadow-xl shadow-primary/20 transition-all flex items-center gap-3 uppercase tracking-widest text-sm" type="button">
+                  <button className="px-8 py-3 bg-primary text-white font-bold rounded-xl hover:bg-blue-700 shadow-xl shadow-primary/20 transition-all flex items-center gap-3 uppercase tracking-widest text-sm" type="button">
                     Publish Prompt
                     <span className="material-symbols-outlined text-lg">rocket_launch</span>
                   </button>
@@ -233,9 +214,9 @@ export default function PostPrompt() {
           </div>
 
           {/* Preview Sidebar */}
-          <div className="lg:w-96">
-            <div className="sticky top-32">
-              <div className="mb-6 flex items-center justify-between">
+          <div className="lg:w-80">
+            <div className="sticky top-24">
+              <div className="mb-4 flex items-center justify-between">
                 <h2 className="text-sm font-bold uppercase tracking-widest text-slate-400">Live Preview</h2>
                 <div className="flex items-center gap-2 text-[10px] text-emerald-500 font-bold bg-emerald-50 px-3 py-1 rounded-full uppercase tracking-widest">
                   <span className="relative flex h-2 w-2">
@@ -247,7 +228,7 @@ export default function PostPrompt() {
               </div>
 
               {/* Professional Preview Card - Matching Home Style */}
-              <div className="group relative bg-white rounded-[2rem] overflow-hidden border border-slate-100 shadow-2xl transition-all duration-500 hover:-translate-y-2">
+              <div className="group relative bg-white rounded-xl overflow-hidden border border-slate-100 shadow-2xl transition-all duration-500 hover:-translate-y-2">
                 <div className="relative aspect-[4/3] overflow-hidden">
                   {formData.image ? (
                     <div
@@ -270,10 +251,10 @@ export default function PostPrompt() {
                     {formData.category || 'Draft'}
                   </div>
                 </div>
-                <div className="p-6 flex flex-col gap-4">
+                <div className="p-4 flex flex-col gap-3">
                   <div className="flex items-start justify-between">
                     <div className="min-w-0">
-                      <h4 className="font-bold text-base leading-tight group-hover:text-primary transition-colors truncate">
+                      <h4 className="font-bold text-sm leading-tight group-hover:text-primary transition-colors truncate">
                         {formData.title || 'Untitled Prompt'}
                       </h4>
                       <p className="text-xs text-slate-400 mt-1 font-medium truncate">
@@ -282,15 +263,15 @@ export default function PostPrompt() {
                     </div>
                   </div>
                   {formData.promptText && (
-                    <div className="pt-4 border-t border-slate-50">
-                      <p className="text-xs text-slate-600 font-mono line-clamp-3 leading-relaxed">
+                    <div className="pt-3 border-t border-slate-50">
+                      <p className="text-xs text-slate-600 font-mono line-clamp-2 leading-relaxed">
                         {formData.promptText}
                       </p>
                     </div>
                   )}
-                  <div className="flex items-center justify-between pt-4 border-t border-slate-50">
+                  <div className="flex items-center justify-between pt-3 border-t border-slate-50">
                     <div className="flex items-center gap-2">
-                      <div className="size-6 rounded-full bg-primary/10 flex items-center justify-center text-primary text-[10px] font-bold border border-white">
+                      <div className="size-5 rounded-full bg-primary/10 flex items-center justify-center text-primary text-[8px] font-bold border border-white">
                         JD
                       </div>
                       <span className="text-xs font-bold text-slate-600">John Doe</span>
@@ -309,8 +290,8 @@ export default function PostPrompt() {
       </main>
 
       {/* Footer Cleanup */}
-      <footer className="mt-20 border-t border-slate-100 bg-white py-12">
-        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
+      <footer className="mt-16 border-t border-slate-100 bg-white py-10">
+        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex items-center gap-2">
             <div className="bg-primary p-1.5 rounded-lg text-white text-[20px]">
               <span className="material-symbols-outlined block">electric_bolt</span>
@@ -325,6 +306,6 @@ export default function PostPrompt() {
           <p className="text-xs font-medium text-slate-400">© 2026 PromptMarket. All rights reserved.</p>
         </div>
       </footer>
-    </div>
+    </>
   );
 }

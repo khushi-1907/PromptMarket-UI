@@ -13,7 +13,13 @@ export const promptData = [
         fullDescription: 'Master the art of high-fidelity cyberpunk portraits with this meticulously engineered prompt structure. Designed specifically for the Midjourney v6 and GPT-4 pipeline, it generates hyper-detailed characters featuring intricate cybernetics, volumetric neon lighting, and cinematic atmospheric effects.',
         verifiedModels: ['MIDJOURNEY 6', 'STABLE DIV XL', 'GPT-4V'],
         sales: '3,492',
-        impact: '12.8k'
+        impact: '12.8k',
+        media: [
+            { type: 'image', url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuA0gEfY77P8og-t9s-StwLL50G1Kdh_qBP-RXyRh2V3hm5l4M_rCqeDgSYVJK3EqbyEuQlMxAF69HBjmhWJxSR-XyQEENOTir16rTcei3IQn4dGAxGn7QWLFHTXU9exp_az796KuzdNKlOjluXlFkacWLBT1D36MOjmVnMcIDrdyktN52HsUQho69MKXlCb2FAnQaB8s_5tclye_LIYnjaokIGZsXylVvOnbDsBPx9xmpgGdC-7NALHK42h60DgC6wFOdaoV3o1fNo', alt: 'Cyberpunk character with neon lighting' },
+            { type: 'video', url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4', alt: 'Cyberpunk portrait generation process' },
+            { type: 'image', url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDI987ybQdbxwPydnrprUfqA62O7YApVvRSJ7TCft7JoahgzuLRlr-wXCzGOxKM-23bF3DYoXNDtxBqBsbQ16ws1p6UDRj2nlIhnqYh0zxmHfloczbCQWbAQzepllwO4irXJ7SgGMRlKKrWqoyNunVhxXvuoGwhaxzL-9J6qdnlzRh0t4pLWEVO-bzmsocuFqSbO7QWAHJLxiZ7Doh_g7MroooFZpLBRkemaCRNDDKViwfOA0w771JCETACLhpG1oUj6xdRzgfuDCU', alt: 'Detailed cybernetic face close-up' },
+            { type: 'image', url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDwV7lEU31YeJqf1JRMvLTd1v83P6GcfbCIZ3QNAspeTGe5vvBf9xI8TlQO7f92XlaBblJm5yrPBrXAcBd0XuYvuNdBA0D4eZPxLhhRQbggO5nQkyA6XwzE8xIAAjHxy6b-W_UO4j-eXeZDaxEI7CE4nxOWtI3J5AreKOUUfCAm9scqRqqi85NNqZkFMg1AduITxFfUe3uCP9xHf29_jSn4uyH5kqHFC8pK1TKxiERROwblWMjhy92EIkr3O07xmXFW-NZgRdGjtzA', alt: 'Full body cyberpunk character pose' }
+        ]
     },
     {
         id: 2,
