@@ -161,18 +161,18 @@ export default function Home() {
           </Link>
           <div className="flex items-center gap-4">
             <button
-              onClick={() => setShowSidebar(!showSidebar)}
+              onClick={() => setShowMobileFilters(true)}
               className="lg:hidden flex items-center gap-2 px-4 py-2 rounded-full bg-slate-100 text-slate-800 text-sm font-bold transition-all active:scale-95"
             >
               <span className="material-symbols-outlined text-[20px]">tune</span>
               <span>Filter</span>
             </button>
             <button
-              onClick={() => setShowMobileFilters(true)}
+              onClick={() => setShowSidebar(!showSidebar)}
               className="hidden lg:flex items-center gap-2 px-4 py-2 rounded-full bg-slate-100 text-slate-800 text-sm font-bold transition-all active:scale-95"
             >
               <span className="material-symbols-outlined text-[20px]">tune</span>
-              <span>Filter</span>
+              <span>{showSidebar ? 'Hide' : 'Show'} Filters</span>
             </button>
             <Link href="/profile">
               <div
@@ -310,7 +310,7 @@ export default function Home() {
         </nav>
 
         {/* Filter Sidebar */}
-        <aside className={`${showSidebar ? 'w-60' : 'w-0'} border-r border-slate-200 bg-white hidden lg:flex flex-col sticky top-0 h-screen overflow-y-auto no-scrollbar shrink-0 transition-all duration-300`}>
+        <aside className={`${showSidebar ? 'w-60 lg:flex' : 'w-0 hidden'} border-r border-slate-200 bg-white flex-col sticky top-0 h-screen overflow-y-auto no-scrollbar shrink-0 transition-all duration-300`}>
           {showSidebar && (
             <div className="p-5">
               <div className="flex items-center justify-between mb-6">
@@ -323,241 +323,243 @@ export default function Home() {
                 </button>
               </div>
 
-            <div className="space-y-7">
-              {/* Sort By */}
-              <div>
-                <h4 className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">Sort By</h4>
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-600 focus:ring-primary outline-none"
-                >
-                  <option>Relevant</option>
-                  <option>Price: Low to High</option>
-                  <option>Price: High to Low</option>
-                  <option>Top Rated</option>
-                </select>
-              </div>
+              <div className="space-y-7">
+                {/* Sort By */}
+                <div>
+                  <h4 className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">Sort By</h4>
+                  <select
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value)}
+                    className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-600 focus:ring-primary outline-none"
+                  >
+                    <option>Relevant</option>
+                    <option>Price: Low to High</option>
+                    <option>Price: High to Low</option>
+                    <option>Top Rated</option>
+                  </select>
+                </div>
 
-              {/* Categories */}
-              <div>
-                <h4 className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">Categories</h4>
-                <div className="space-y-2">
-                  {['Midjourney', 'DALL-E 3', 'GPT-4', 'Claude', 'Stable Diffusion'].map((cat) => (
-                    <label key={cat} className="flex items-center gap-3 cursor-pointer group">
+                {/* Categories */}
+                <div>
+                  <h4 className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">Categories</h4>
+                  <div className="space-y-2">
+                    {['Midjourney', 'DALL-E 3', 'GPT-4', 'Claude', 'Stable Diffusion'].map((cat) => (
+                      <label key={cat} className="flex items-center gap-3 cursor-pointer group">
+                        <input
+                          type="checkbox"
+                          checked={selectedCategories.includes(cat)}
+                          onChange={() => toggleCategory(cat)}
+                          className="w-4 h-4 text-primary border-slate-300 rounded focus:ring-primary"
+                        />
+                        <span className={`text-sm transition-colors ${selectedCategories.includes(cat) ? 'text-primary font-semibold' : 'text-slate-600 group-hover:text-slate-900'}`}>{cat}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Reliability Tier */}
+                <div>
+                  <h4 className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">Reliability</h4>
+                  <div className="space-y-2">
+                    <label className="flex items-center gap-3 cursor-pointer group">
                       <input
                         type="checkbox"
-                        checked={selectedCategories.includes(cat)}
-                        onChange={() => toggleCategory(cat)}
-                        className="w-4 h-4 text-primary border-slate-300 rounded focus:ring-primary"
+                        checked={selectedReliability.includes('emerald')}
+                        onChange={() => toggleReliability('emerald')}
+                        className="w-4 h-4 text-emerald-500 border-slate-300 rounded focus:ring-emerald-500"
                       />
-                      <span className={`text-sm transition-colors ${selectedCategories.includes(cat) ? 'text-primary font-semibold' : 'text-slate-600 group-hover:text-slate-900'}`}>{cat}</span>
+                      <span className="text-sm text-slate-600 group-hover:text-slate-900">Emerald Tier (98%+)</span>
                     </label>
-                  ))}
-                </div>
-              </div>
-
-              {/* Reliability Tier */}
-              <div>
-                <h4 className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">Reliability</h4>
-                <div className="space-y-2">
-                  <label className="flex items-center gap-3 cursor-pointer group">
-                    <input
-                      type="checkbox"
-                      checked={selectedReliability.includes('emerald')}
-                      onChange={() => toggleReliability('emerald')}
-                      className="w-4 h-4 text-emerald-500 border-slate-300 rounded focus:ring-emerald-500"
-                    />
-                    <span className="text-sm text-slate-600 group-hover:text-slate-900">Emerald Tier (98%+)</span>
-                  </label>
-                  <label className="flex items-center gap-3 cursor-pointer group">
-                    <input
-                      type="checkbox"
-                      checked={selectedReliability.includes('blue')}
-                      onChange={() => toggleReliability('blue')}
-                      className="w-4 h-4 text-blue-500 border-slate-300 rounded focus:ring-blue-500"
-                    />
-                    <span className="text-sm text-slate-600 group-hover:text-slate-900">Verified Blue</span>
-                  </label>
-                </div>
-              </div>
-
-              {/* Price Range */}
-              <div>
-                <h4 className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">Price Range</h4>
-                <div className="space-y-2">
-                  {[
-                    { label: 'All', value: 'all' },
-                    { label: 'Free', value: 'free' },
-                    { label: '1–10 Credits', value: '1-10' },
-                    { label: '11–25 Credits', value: '11-25' },
-                    { label: '25+ Credits', value: '25+' }
-                  ].map((range) => (
-                    <label key={range.value} className="flex items-center gap-3 cursor-pointer group">
+                    <label className="flex items-center gap-3 cursor-pointer group">
                       <input
-                        type="radio"
-                        name="price"
-                        checked={selectedPriceRange === range.value}
-                        onChange={() => setSelectedPriceRange(range.value)}
-                        className="w-4 h-4 text-primary border-slate-300 focus:ring-primary"
+                        type="checkbox"
+                        checked={selectedReliability.includes('blue')}
+                        onChange={() => toggleReliability('blue')}
+                        className="w-4 h-4 text-blue-500 border-slate-300 rounded focus:ring-blue-500"
                       />
-                      <span className="text-sm text-slate-600 group-hover:text-slate-900">{range.label}</span>
+                      <span className="text-sm text-slate-600 group-hover:text-slate-900">Verified Blue</span>
                     </label>
-                  ))}
+                  </div>
                 </div>
-              </div>
 
-              {/* Rating */}
-              <div>
-                <h4 className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">Min Rating</h4>
-                <div className="grid grid-cols-2 gap-1.5">
-                  {[4.5, 4.0, 3.5, 0].map((rate) => (
-                    <button
-                      key={rate}
-                      onClick={() => setMinRating(rate)}
-                      className={`py-1.5 rounded-md text-[10px] font-bold border transition-all ${minRating === rate ? 'bg-primary text-white border-primary' : 'bg-white text-slate-400 border-slate-200 hover:border-primary/50'}`}
-                    >
-                      {rate === 0 ? 'Any' : `${rate}⭐`}
-                    </button>
-                  ))}
+                {/* Price Range */}
+                <div>
+                  <h4 className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">Price Range</h4>
+                  <div className="space-y-2">
+                    {[
+                      { label: 'All', value: 'all' },
+                      { label: 'Free', value: 'free' },
+                      { label: '1–10 Credits', value: '1-10' },
+                      { label: '11–25 Credits', value: '11-25' },
+                      { label: '25+ Credits', value: '25+' }
+                    ].map((range) => (
+                      <label key={range.value} className="flex items-center gap-3 cursor-pointer group">
+                        <input
+                          type="radio"
+                          name="price"
+                          checked={selectedPriceRange === range.value}
+                          onChange={() => setSelectedPriceRange(range.value)}
+                          className="w-4 h-4 text-primary border-slate-300 focus:ring-primary"
+                        />
+                        <span className="text-sm text-slate-600 group-hover:text-slate-900">{range.label}</span>
+                      </label>
+                    ))}
+                  </div>
                 </div>
-              </div>
 
-              {/* Clear Filters */}
-              {(selectedCategories.length > 0 || selectedReliability.length > 0 || selectedPriceRange !== 'all' || minRating > 0 || searchQuery) && (
-                <button
-                  onClick={() => {
-                    setSelectedCategories([]);
-                    setSelectedPriceRange('all');
-                    setMinRating(0);
-                    setSelectedReliability([]);
-                    setSelectedModels([]);
-                    setSearchQuery('');
-                  }}
-                  className="w-full py-2 rounded-lg text-xs font-bold text-red-500 border border-red-200 hover:bg-red-50 transition-all"
-                >
-                  Clear All Filters
-                </button>
-              )}
+                {/* Rating */}
+                <div>
+                  <h4 className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">Min Rating</h4>
+                  <div className="grid grid-cols-2 gap-1.5">
+                    {[4.5, 4.0, 3.5, 0].map((rate) => (
+                      <button
+                        key={rate}
+                        onClick={() => setMinRating(rate)}
+                        className={`py-1.5 rounded-md text-[10px] font-bold border transition-all ${minRating === rate ? 'bg-primary text-white border-primary' : 'bg-white text-slate-400 border-slate-200 hover:border-primary/50'}`}
+                      >
+                        {rate === 0 ? 'Any' : `${rate}⭐`}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Clear Filters */}
+                {(selectedCategories.length > 0 || selectedReliability.length > 0 || selectedPriceRange !== 'all' || minRating > 0 || searchQuery) && (
+                  <button
+                    onClick={() => {
+                      setSelectedCategories([]);
+                      setSelectedPriceRange('all');
+                      setMinRating(0);
+                      setSelectedReliability([]);
+                      setSelectedModels([]);
+                      setSearchQuery('');
+                    }}
+                    className="w-full py-2 rounded-lg text-xs font-bold text-red-500 border border-red-200 hover:bg-red-50 transition-all"
+                  >
+                    Clear All Filters
+                  </button>
+                )}
+              </div>
             </div>
-          </div>
           )}
         </aside>
 
         {/* Main Content Area */}
-        <main className="flex-1 lg:max-w-none lg:mx-auto lg:px-6 pb-20 overflow-y-auto h-screen custom-scrollbar">
-          {/* Sidebar Toggle Button */}
-          {!showSidebar && (
-            <div className="lg:flex justify-start mb-4 px-4 hidden">
-              <button
-                onClick={() => setShowSidebar(true)}
-                className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary text-white text-sm font-bold transition-all active:scale-95"
-              >
-                <span className="material-symbols-outlined text-[20px]">tune</span>
-                <span>Show Filters</span>
-              </button>
-            </div>
-          )}
-          {/* Hero / Search */}
-          <section className="py-12 text-center relative">
-            <div className="max-w-2xl mx-auto px-4">
-              <div className="p-2 rounded-2xl shadow-xl border border-slate-200 flex items-center bg-white">
-                <div className="pl-4 text-slate-400">
-                  <span className="material-symbols-outlined">search</span>
-                </div>
-                <input
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-transparent border-none focus:ring-0 text-slate-800 placeholder:text-slate-400 py-3 px-3 text-lg font-light"
-                  placeholder="Search prompts..."
-                  type="text"
-                />
-              </div>
-            </div>
-          </section>
-
-          {/* Quick Filter Tabs */}
-          <section className="mb-10 px-4">
-            <div className="flex gap-3 overflow-x-auto pb-4 custom-scrollbar whitespace-nowrap">
-              {filters.map((filter) => (
+        <main className="flex-1 overflow-y-auto h-screen custom-scrollbar">
+          <div className="w-[80%] mx-auto">
+            {/* Sidebar Toggle Button */}
+            {!showSidebar && (
+              <div className="lg:flex justify-start mb-4 px-4 hidden">
                 <button
-                  key={filter}
-                  onClick={() => setActiveTab(filter)}
-                  className={`px-6 py-2.5 rounded-full text-sm font-medium transition-colors ${activeTab === filter
-                    ? 'bg-primary text-white'
-                    : 'bg-white border border-slate-200 text-slate-600 hover:border-primary/50'
-                    }`}
+                  onClick={() => setShowSidebar(true)}
+                  className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary text-white text-sm font-bold transition-all active:scale-95"
                 >
-                  {filter}
-                </button>
-              ))}
-            </div>
-          </section>
-
-          {/* Prompt Grid */}
-          <section className="px-4">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-sm font-bold uppercase tracking-widest text-slate-400">
-                {filteredPrompts.length} Results Found
-              </h3>
-            </div>
-
-            {filteredPrompts.length > 0 ? (
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3">
-                {filteredPrompts.map((prompt) => (
-                  <Link key={prompt.id} href={`/prompt/${prompt.id}`} className="block">
-                    <div className="prompt-card group bg-white rounded-xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-lg transition-all duration-300">
-                      <div className="relative aspect-square overflow-hidden">
-                        <div
-                          className="prompt-image w-full h-full bg-cover bg-center transition-transform duration-500"
-                          style={{ backgroundImage: `url(${prompt.image})` }}
-                        />
-                        <div className="absolute top-2 right-2 glass-effect px-2 py-1 rounded-md flex items-center gap-1">
-                          <span className="material-symbols-outlined text-primary text-[14px] fill-[1]">token</span>
-                          <span className="text-xs font-bold text-slate-800">{prompt.price}</span>
-                        </div>
-                        <div className={`absolute bottom-2 left-2 flex items-center gap-1 ${prompt.reliabilityType === 'emerald' ? 'bg-emerald-500/90' : 'bg-blue-500/90'} text-white px-1.5 py-0.5 rounded text-[9px] font-bold uppercase backdrop-blur-sm`}>
-                          <span className="material-symbols-outlined text-[11px]">
-                            {prompt.reliabilityType === 'emerald' ? 'check_circle' : 'new_releases'}
-                          </span>
-                          {prompt.reliability}
-                        </div>
-                      </div>
-                      <div className="p-3">
-                        <div className="flex justify-between items-start mb-1">
-                          <h4 className="font-bold text-xs leading-tight group-hover:text-primary transition-colors truncate">{prompt.title}</h4>
-                          <span className="text-[9px] bg-slate-100 px-1 py-0.5 rounded text-slate-500 font-bold ml-1 shrink-0">{prompt.rating}⭐</span>
-                        </div>
-                        <div className="flex items-center justify-between text-[9px] text-slate-400 font-medium">
-                          <span className="truncate">{prompt.model}</span>
-                          <span className="text-primary shrink-0 ml-1">{prompt.creator}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            ) : (
-              <div className="py-20 text-center">
-                <span className="material-symbols-outlined text-6xl text-slate-200 mb-4 block">search_off</span>
-                <p className="text-slate-500 text-lg">No prompts matches your current filters.</p>
-                <button
-                  onClick={() => {
-                    setSelectedCategories([]);
-                    setSelectedPriceRange('all');
-                    setMinRating(0);
-                    setSelectedReliability([]);
-                    setSelectedModels([]);
-                    setSearchQuery('');
-                  }}
-                  className="mt-4 text-primary font-bold hover:underline"
-                >
-                  Clear all filters
+                  <span className="material-symbols-outlined text-[20px]">tune</span>
+                  <span>Show Filters</span>
                 </button>
               </div>
             )}
-          </section>
+            {/* Hero / Search */}
+            <section className="py-12 text-center relative">
+              <div className="max-w-2xl mx-auto px-4">
+                <div className="p-2 rounded-2xl shadow-xl border border-slate-200 flex items-center bg-white">
+                  <div className="pl-4 text-slate-400">
+                    <span className="material-symbols-outlined">search</span>
+                  </div>
+                  <input
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full bg-transparent border-none focus:ring-0 text-slate-800 placeholder:text-slate-400 py-3 px-3 text-lg font-light"
+                    placeholder="Search prompts..."
+                    type="text"
+                  />
+                </div>
+              </div>
+            </section>
 
+            {/* Quick Filter Tabs */}
+            <section className="mb-10 px-4">
+              <div className="flex gap-3 overflow-x-auto pb-4 custom-scrollbar whitespace-nowrap">
+                {filters.map((filter) => (
+                  <button
+                    key={filter}
+                    onClick={() => setActiveTab(filter)}
+                    className={`px-6 py-2.5 rounded-full text-sm font-medium transition-colors ${activeTab === filter
+                      ? 'bg-primary text-white'
+                      : 'bg-white border border-slate-200 text-slate-600 hover:border-primary/50'
+                      }`}
+                  >
+                    {filter}
+                  </button>
+                ))}
+              </div>
+            </section>
+
+            {/* Prompt Grid */}
+            <section className="px-4">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-sm font-bold uppercase tracking-widest text-slate-400">
+                  {filteredPrompts.length} Results Found
+                </h3>
+              </div>
+
+              {filteredPrompts.length > 0 ? (
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3">
+                  {filteredPrompts.map((prompt) => (
+                    <Link key={prompt.id} href={`/prompt/${prompt.id}`} className="block">
+                      <div className="prompt-card group bg-white rounded-xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-lg transition-all duration-300">
+                        <div className="relative aspect-square overflow-hidden">
+                          <div
+                            className="prompt-image w-full h-full bg-cover bg-center transition-transform duration-500"
+                            style={{ backgroundImage: `url(${prompt.image})` }}
+                          />
+                          <div className="absolute top-2 right-2 glass-effect px-2 py-1 rounded-md flex items-center gap-1">
+                            <span className="material-symbols-outlined text-primary text-[14px] fill-[1]">token</span>
+                            <span className="text-xs font-bold text-slate-800">{prompt.price}</span>
+                          </div>
+                          <div className={`absolute bottom-2 left-2 flex items-center gap-1 ${prompt.reliabilityType === 'emerald' ? 'bg-emerald-500/90' : 'bg-blue-500/90'} text-white px-1.5 py-0.5 rounded text-[9px] font-bold uppercase backdrop-blur-sm`}>
+                            <span className="material-symbols-outlined text-[11px]">
+                              {prompt.reliabilityType === 'emerald' ? 'check_circle' : 'new_releases'}
+                            </span>
+                            {prompt.reliability}
+                          </div>
+                        </div>
+                        <div className="p-3">
+                          <div className="flex justify-between items-start mb-1">
+                            <h4 className="font-bold text-xs leading-tight group-hover:text-primary transition-colors truncate">{prompt.title}</h4>
+                            <span className="text-[9px] bg-slate-100 px-1 py-0.5 rounded text-slate-500 font-bold ml-1 shrink-0">{prompt.rating}⭐</span>
+                          </div>
+                          <div className="flex items-center justify-between text-[9px] text-slate-400 font-medium">
+                            <span className="truncate">{prompt.model}</span>
+                            <span className="text-primary shrink-0 ml-1">{prompt.creator}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              ) : (
+                <div className="py-20 text-center">
+                  <span className="material-symbols-outlined text-6xl text-slate-200 mb-4 block">search_off</span>
+                  <p className="text-slate-500 text-lg">No prompts matches your current filters.</p>
+                  <button
+                    onClick={() => {
+                      setSelectedCategories([]);
+                      setSelectedPriceRange('all');
+                      setMinRating(0);
+                      setSelectedReliability([]);
+                      setSelectedModels([]);
+                      setSearchQuery('');
+                    }}
+                    className="mt-4 text-primary font-bold hover:underline"
+                  >
+                    Clear all filters
+                  </button>
+                </div>
+              )}
+            </section>
+
+          </div>
         </main>
       </div>
 
