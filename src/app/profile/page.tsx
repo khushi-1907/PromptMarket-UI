@@ -237,8 +237,6 @@ export default function Profile() {
                                                     <span className="text-[6px] xs:text-[7px] sm:text-[9px] font-bold leading-none">{prompt.impact}</span>
                                                     <span className="material-symbols-outlined text-[8px] xs:text-[10px] sm:text-[12px]">download</span>
                                                     <span className="text-[6px] xs:text-[7px] sm:text-[9px] font-bold leading-none">{prompt.sales || '840'}</span>
-                                                    <span className="material-symbols-outlined text-[8px] xs:text-[10px] sm:text-[12px]">star</span>
-                                                    <span className="text-[6px] xs:text-[7px] sm:text-[9px] font-bold leading-none">4.9</span>
                                                 </div>
                                                 <div className="flex items-center gap-0.5 bg-primary/10 px-1.5 py-0.5 rounded-full flex-shrink-0">
                                                     <span className="material-symbols-outlined text-primary text-[8px] xs:text-[9px] sm:text-[11px] fill-[1]">monetization_on</span>

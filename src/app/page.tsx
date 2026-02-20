@@ -290,7 +290,7 @@ export default function Home() {
       {/* Desktop Layout: Main Content with Sidebar */}
       <div className="flex flex-1">
         {/* Main Content Area */}
-        <main className="flex-1 overflow-y-auto h-screen custom-scrollbar transition-all duration-300 lg:ml-16">
+        <main className="flex-1 transition-all duration-300 lg:ml-16">
           <div className="w-full px-4 sm:px-6 lg:px-8">
             {/* Mobile Top Navigation */}
             <nav className="lg:hidden sticky top-0 z-50 w-full glass-effect border-b border-white/20 mb-4">

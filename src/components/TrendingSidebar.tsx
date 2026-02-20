@@ -53,8 +53,8 @@ const topCreators = [
 
 export default function TrendingSidebar() {
   return (
-    <div className="w-80 bg-gray-50 border-l border-gray-200 h-screen overflow-y-auto hidden xl:block">
-      <div className="sticky top-0 bg-gray-50 border-b border-gray-200 px-6 py-4 z-10">
+    <div className="w-80 bg-gray-50 border-l border-gray-200 hidden xl:block">
+      <div className="bg-gray-50 border-b border-gray-200 px-6 py-4">
         <h2 className="text-lg font-semibold text-gray-900">Discover</h2>
         <p className="text-sm text-gray-600">Trending prompts & creators</p>
       </div>

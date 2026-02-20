@@ -277,7 +277,6 @@ export default function PostPrompt() {
                       <span className="text-xs font-bold text-slate-600">John Doe</span>
                     </div>
                     <div className="flex items-center gap-1 text-xs font-bold text-slate-400">
-                      <span className="material-symbols-outlined text-[16px] text-yellow-500 fill-[1]">star</span>
                       <span className="text-slate-700 text-xs">New</span>
                     </div>
                   </div>

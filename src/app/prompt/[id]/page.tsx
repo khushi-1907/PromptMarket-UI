@@ -61,8 +61,7 @@ export default function PromptDetails() {
                                         {prompt.category.split(' • ')[0]}
                                     </div>
                                     <div className="flex items-center gap-1.5 text-sm font-bold text-slate-500">
-                                        <span className="material-symbols-outlined text-[18px] text-yellow-500 fill-[1]">star</span>
-                                        <span>4.9 (1.2k Reviews)</span>
+                                        <span>(1.2k Reviews)</span>
                                     </div>
                                 </div>
                             </div>
