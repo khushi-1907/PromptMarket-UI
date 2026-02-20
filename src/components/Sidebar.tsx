@@ -1,8 +1,17 @@
 'use client';
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export default function Sidebar() {
+  const pathname = usePathname();
+  
+  const isActive = (path: string) => {
+    if (path === '/' && pathname === '/') return true;
+    if (path !== '/' && pathname.startsWith(path)) return true;
+    return false;
+  };
+
   return (
     <>
       {/* Left Navigation Sidebar */}
@@ -13,11 +22,25 @@ export default function Sidebar() {
           </div>
         </Link>
         <div className="flex flex-col items-center gap-3 w-full px-4 flex-1">
-          <a href="#" className="flex flex-col items-center gap-1.5 w-full rounded-xl py-4 bg-primary/10 text-primary transition-all">
+          <Link 
+            href="/" 
+            className={`flex flex-col items-center gap-1.5 w-full rounded-xl py-4 transition-all ${
+              isActive('/') 
+                ? 'bg-primary/10 text-primary' 
+                : 'text-slate-400 hover:bg-slate-100 hover:text-slate-700'
+            }`}
+          >
             <span className="material-symbols-outlined text-[22px]">explore</span>
             <span className="text-[11px] font-bold uppercase tracking-wider">Explore</span>
-          </a>
-          <Link href="/profile" className="flex flex-col items-center gap-1.5 w-full rounded-xl py-4 text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-all">
+          </Link>
+          <Link 
+            href="/profile" 
+            className={`flex flex-col items-center gap-1.5 w-full rounded-xl py-4 transition-all ${
+              isActive('/profile') 
+                ? 'bg-primary/10 text-primary' 
+                : 'text-slate-400 hover:bg-slate-100 hover:text-slate-700'
+            }`}
+          >
             <span className="material-symbols-outlined text-[22px]">person</span>
             <span className="text-[11px] font-bold uppercase tracking-wider">Profile</span>
           </Link>

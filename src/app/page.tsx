@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 
 const promptData = [
@@ -138,7 +138,25 @@ export default function Home() {
   const [selectedModels, setSelectedModels] = useState<string[]>([]);
   const [selectedReliability, setSelectedReliability] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState('Relevant');
-  const [showFiltersPanel, setShowFiltersPanel] = useState(false);
+  const [showFiltersPanel, setShowFiltersPanel] = useState(true);
+  const [bookmarkedPrompts, setBookmarkedPrompts] = useState<Set<number>>(new Set());
+  const [activeFilterTab, setActiveFilterTab] = useState('service');
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setOpenDropdown(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   // Filtering Logic
   const filteredPrompts = promptData.filter(prompt => {
@@ -164,6 +182,20 @@ export default function Home() {
 
   const toggleReliability = (rel: string) => {
     setSelectedReliability(prev => prev.includes(rel) ? prev.filter(r => r !== rel) : [...prev, rel]);
+  };
+
+  const toggleBookmark = (promptId: number, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setBookmarkedPrompts(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(promptId)) {
+        newSet.delete(promptId);
+      } else {
+        newSet.add(promptId);
+      }
+      return newSet;
+    });
   };
 
   return (
@@ -270,20 +302,6 @@ export default function Home() {
                   <h1 className="text-xl font-bold tracking-tight">PromptMarket</h1>
                 </div>
                 <div className="flex items-center gap-4">
-                  <button
-                    onClick={() => setShowMobileFilters(true)}
-                    className="lg:hidden flex items-center gap-2 px-4 py-2 rounded-full bg-slate-100 text-slate-800 text-sm font-bold transition-all active:scale-95"
-                  >
-                    <span className="material-symbols-outlined text-[20px]">tune</span>
-                    <span>Filter</span>
-                  </button>
-                  <button
-                    onClick={() => setShowSidebar(!showSidebar)}
-                    className="hidden lg:flex items-center gap-2 px-4 py-2 rounded-full bg-slate-100 text-slate-800 text-sm font-bold transition-all active:scale-95"
-                  >
-                    <span className="material-symbols-outlined text-[20px]">tune</span>
-                    <span>{showSidebar ? 'Hide' : 'Show'} Filters</span>
-                  </button>
                   <Link href="/profile">
                     <div
                       className="size-10 rounded-full border-2 border-white bg-cover bg-center shadow-sm cursor-pointer hover:border-primary transition-colors"
@@ -356,69 +374,184 @@ export default function Home() {
                 </button>
               </div>
 
-              {/* Filters Panel - Fiverr Style */}
+              {/* Filters Panel - Dropdown Style */}
               {showFiltersPanel && (
-                <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {/* Categories Column */}
-                    <div>
-                      <h4 className="text-sm font-semibold text-slate-800 mb-2">Categories</h4>
-                      <div className="space-y-1">
-                        {['Midjourney', 'DALL-E 3', 'GPT-4', 'Claude', 'Stable Diffusion', 'Architecture', 'Nature', 'Abstract', 'Coding'].map((cat) => {
-                          const count = verticalCategories.find(c => c.name === cat)?.count || 0;
-                          return (
-                            <label key={cat} className="flex items-center justify-between cursor-pointer group p-1.5 rounded-lg hover:bg-slate-50 transition-colors">
-                              <div className="flex items-center gap-2">
-                                <input
-                                  type="checkbox"
-                                  checked={selectedCategories.includes(cat)}
-                                  onChange={() => toggleCategory(cat)}
-                                  className="w-3.5 h-3.5 text-primary border-slate-300 rounded focus:ring-primary"
-                                />
-                                <span className={`text-sm transition-colors ${selectedCategories.includes(cat) ? 'text-primary font-semibold' : 'text-slate-600 group-hover:text-slate-900'}`}>{cat}</span>
-                              </div>
-                              <span className="text-xs text-slate-400">{count}</span>
-                            </label>
-                          );
-                        })}
-                      </div>
-                    </div>
+                <div ref={dropdownRef} className="bg-white border border-slate-200 rounded-xl shadow-sm p-4">
+                  {/* Filter Tabs */}
+                  <div className="flex flex-wrap gap-2">
+                    {[
+                      { id: 'service', label: 'Service options' },
+                      { id: 'seller', label: 'Seller details' },
+                      { id: 'budget', label: 'Budget' },
+                      { id: 'delivery', label: 'Delivery time' }
+                    ].map((tab) => (
+                      <div key={tab.id} className="relative">
+                        <button
+                          onClick={() => setOpenDropdown(openDropdown === tab.id ? null : tab.id)}
+                          className={`px-4 py-2 text-sm font-medium transition-all rounded-lg border flex items-center gap-2 ${
+                            openDropdown === tab.id
+                              ? 'text-primary border-primary bg-primary/5'
+                              : 'text-slate-600 border-slate-200 hover:text-slate-900 hover:bg-slate-50'
+                          }`}
+                        >
+                          {tab.label}
+                          <span className={`material-symbols-outlined text-[16px] transition-transform duration-200 ${
+                            openDropdown === tab.id ? 'rotate-180' : ''
+                          }`}>
+                            expand_more
+                          </span>
+                        </button>
 
-                    {/* Models Column */}
-                    <div>
-                      <h4 className="text-sm font-semibold text-slate-800 mb-2">Models</h4>
-                      <div className="space-y-1">
-                        {['MIDJOURNEY V8', 'STABLE DIFFUSION 3', 'GPT-5 TURBO', 'DALL-E 4', 'MIDJOURNEY V7', 'CLAUDE 4 OPUS'].map((model) => (
-                          <label key={model} className="flex items-center gap-2 cursor-pointer group p-1.5 rounded-lg hover:bg-slate-50 transition-colors">
-                            <input
-                              type="checkbox"
-                              checked={selectedModels.includes(model)}
-                              onChange={() => toggleModel(model)}
-                              className="w-3.5 h-3.5 text-primary border-slate-300 rounded focus:ring-primary"
-                            />
-                            <span className={`text-sm transition-colors ${selectedModels.includes(model) ? 'text-primary font-semibold' : 'text-slate-600 group-hover:text-slate-900'}`}>{model}</span>
-                          </label>
-                        ))}
-                      </div>
-                    </div>
+                        {/* Dropdown Menu */}
+                        {openDropdown === tab.id && (
+                          <div className="absolute top-full left-0 mt-1 w-80 bg-white border border-slate-200 rounded-lg shadow-lg z-50 max-h-96 overflow-y-auto">
+                            <div className="p-4">
+                              {/* Service Options Dropdown */}
+                              {tab.id === 'service' && (
+                                <div className="space-y-4">
+                                  <div>
+                                    <h4 className="text-sm font-semibold text-slate-800 mb-2">Categories</h4>
+                                    <div className="space-y-1">
+                                      {['Midjourney', 'DALL-E 3', 'GPT-4', 'Claude', 'Stable Diffusion', 'Architecture', 'Nature', 'Abstract', 'Coding'].map((cat) => {
+                                        const count = verticalCategories.find(c => c.name === cat)?.count || 0;
+                                        return (
+                                          <label key={cat} className="flex items-center justify-between cursor-pointer group p-1.5 rounded hover:bg-slate-50 transition-colors">
+                                            <div className="flex items-center gap-2">
+                                              <input
+                                                type="checkbox"
+                                                checked={selectedCategories.includes(cat)}
+                                                onChange={() => toggleCategory(cat)}
+                                                className="w-3.5 h-3.5 text-primary border-slate-300 rounded focus:ring-primary"
+                                              />
+                                              <span className={`text-xs transition-colors ${selectedCategories.includes(cat) ? 'text-primary font-semibold' : 'text-slate-600 group-hover:text-slate-900'}`}>{cat}</span>
+                                            </div>
+                                            <span className="text-xs text-slate-400">({count})</span>
+                                          </label>
+                                        );
+                                      })}
+                                    </div>
+                                  </div>
 
-                    {/* Reliability Column */}
-                    <div>
-                      <h4 className="text-sm font-semibold text-slate-800 mb-2">Reliability</h4>
-                      <div className="space-y-1">
-                        {['100% Reliable', '98% Reliability', '97% Reliability', '95% Reliability', '92% Reliability'].map((rel) => (
-                          <label key={rel} className="flex items-center gap-2 cursor-pointer group p-1.5 rounded-lg hover:bg-slate-50 transition-colors">
-                            <input
-                              type="checkbox"
-                              checked={selectedReliability.includes(rel)}
-                              onChange={() => toggleReliability(rel)}
-                              className="w-3.5 h-3.5 text-primary border-slate-300 rounded focus:ring-primary"
-                            />
-                            <span className={`text-sm transition-colors ${selectedReliability.includes(rel) ? 'text-primary font-semibold' : 'text-slate-600 group-hover:text-slate-900'}`}>{rel}</span>
-                          </label>
-                        ))}
+                                  <div>
+                                    <h4 className="text-sm font-semibold text-slate-800 mb-2">Models</h4>
+                                    <div className="space-y-1">
+                                      {['MIDJOURNEY V8', 'STABLE DIFFUSION 3', 'GPT-5 TURBO', 'DALL-E 4', 'MIDJOURNEY V7', 'CLAUDE 4 OPUS'].map((model) => (
+                                        <label key={model} className="flex items-center gap-2 cursor-pointer group p-1.5 rounded hover:bg-slate-50 transition-colors">
+                                          <input
+                                            type="checkbox"
+                                            checked={selectedModels.includes(model)}
+                                            onChange={() => toggleModel(model)}
+                                            className="w-3.5 h-3.5 text-primary border-slate-300 rounded focus:ring-primary"
+                                          />
+                                          <span className={`text-xs transition-colors ${selectedModels.includes(model) ? 'text-primary font-semibold' : 'text-slate-600 group-hover:text-slate-900'}`}>{model}</span>
+                                        </label>
+                                      ))}
+                                    </div>
+                                  </div>
+                                </div>
+                              )}
+
+                              {/* Seller Details Dropdown */}
+                              {tab.id === 'seller' && (
+                                <div className="space-y-4">
+                                  <div>
+                                    <h4 className="text-sm font-semibold text-slate-800 mb-2">Seller level</h4>
+                                    <div className="space-y-1">
+                                      {[
+                                        { name: 'Top Rated Seller', count: 428 },
+                                        { name: 'Level 2', count: 1946 },
+                                        { name: 'Level 1', count: 2524 },
+                                        { name: 'New Seller', count: 12906 }
+                                      ].map((seller) => (
+                                        <label key={seller.name} className="flex items-center justify-between cursor-pointer group p-1.5 rounded hover:bg-slate-50 transition-colors">
+                                          <div className="flex items-center gap-2">
+                                            <input
+                                              type="checkbox"
+                                              className="w-3.5 h-3.5 text-primary border-slate-300 rounded focus:ring-primary"
+                                            />
+                                            <span className="text-xs text-slate-600 group-hover:text-slate-900">{seller.name}</span>
+                                          </div>
+                                          <span className="text-xs text-slate-400">({seller.count})</span>
+                                        </label>
+                                      ))}
+                                    </div>
+                                  </div>
+
+                                  <div>
+                                    <h4 className="text-sm font-semibold text-slate-800 mb-2">Reliability</h4>
+                                    <div className="space-y-1">
+                                      {['100% Reliable', '98% Reliability', '97% Reliability', '95% Reliability', '92% Reliability'].map((rel) => (
+                                        <label key={rel} className="flex items-center gap-2 cursor-pointer group p-1.5 rounded hover:bg-slate-50 transition-colors">
+                                          <input
+                                            type="checkbox"
+                                            checked={selectedReliability.includes(rel)}
+                                            onChange={() => toggleReliability(rel)}
+                                            className="w-3.5 h-3.5 text-primary border-slate-300 rounded focus:ring-primary"
+                                          />
+                                          <span className={`text-xs transition-colors ${selectedReliability.includes(rel) ? 'text-primary font-semibold' : 'text-slate-600 group-hover:text-slate-900'}`}>{rel}</span>
+                                        </label>
+                                      ))}
+                                    </div>
+                                  </div>
+                                </div>
+                              )}
+
+                              {/* Budget Dropdown */}
+                              {tab.id === 'budget' && (
+                                <div className="space-y-4">
+                                  <div>
+                                    <h4 className="text-sm font-semibold text-slate-800 mb-2">Price range</h4>
+                                    <div className="space-y-1">
+                                      {[
+                                        { range: 'Under $10', min: 0, max: 9 },
+                                        { range: '$10 - $20', min: 10, max: 20 },
+                                        { range: '$20 - $30', min: 20, max: 30 },
+                                        { range: '$30 - $50', min: 30, max: 50 },
+                                        { range: '$50 and above', min: 50, max: 999 }
+                                      ].map((budget) => (
+                                        <label key={budget.range} className="flex items-center gap-2 cursor-pointer group p-1.5 rounded hover:bg-slate-50 transition-colors">
+                                          <input
+                                            type="checkbox"
+                                            className="w-3.5 h-3.5 text-primary border-slate-300 rounded focus:ring-primary"
+                                          />
+                                          <span className="text-xs text-slate-600 group-hover:text-slate-900">{budget.range}</span>
+                                        </label>
+                                      ))}
+                                    </div>
+                                  </div>
+                                </div>
+                              )}
+
+                              {/* Delivery Time Dropdown */}
+                              {tab.id === 'delivery' && (
+                                <div className="space-y-4">
+                                  <div>
+                                    <h4 className="text-sm font-semibold text-slate-800 mb-2">Delivery time</h4>
+                                    <div className="space-y-1">
+                                      {[
+                                        { time: 'Express (24 hours)', hours: 24 },
+                                        { time: 'Fast (1-3 days)', hours: 72 },
+                                        { time: 'Standard (3-7 days)', hours: 168 },
+                                        { time: 'Extended (1-2 weeks)', hours: 336 },
+                                        { time: 'Flexible (2+ weeks)', hours: 999 }
+                                      ].map((delivery) => (
+                                        <label key={delivery.time} className="flex items-center gap-2 cursor-pointer group p-1.5 rounded hover:bg-slate-50 transition-colors">
+                                          <input
+                                            type="checkbox"
+                                            className="w-3.5 h-3.5 text-primary border-slate-300 rounded focus:ring-primary"
+                                          />
+                                          <span className="text-xs text-slate-600 group-hover:text-slate-900">{delivery.time}</span>
+                                        </label>
+                                      ))}
+                                    </div>
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        )}
                       </div>
-                    </div>
+                    ))}
                   </div>
                 </div>
               )}
@@ -444,12 +577,19 @@ export default function Home() {
                             style={{ backgroundImage: `url(${prompt.image})` }}
                           />
 
-                          {/* Top Right model Badge */}
-                          <div className="absolute top-1.5 xs:top-2 sm:top-3 right-1.5 xs:right-2 sm:right-3 bg-white/90 backdrop-blur-md px-1.5 xs:px-2 sm:px-3 py-0.8 xs:py-1 sm:py-1.5 rounded-full flex items-center gap-0.8 xs:gap-1 sm:gap-1.5 shadow-sm border border-white/20">
-                            <div className="size-1 xs:size-1.5 sm:size-2 rounded-full bg-indigo-500" />
-                            <span className="text-[6px] xs:text-[8px] sm:text-[10px] font-black tracking-tighter text-slate-700 uppercase hidden xs:inline sm:inline">{(prompt as any).model}</span>
-                            <span className="text-[6px] xs:text-[8px] sm:text-[10px] font-black tracking-tighter text-slate-700 uppercase xs:hidden sm:hidden">{(prompt as any).model?.split(' ')[0] || 'AI'}</span>
-                          </div>
+                          {/* Bookmark Button */}
+                          <button
+                            onClick={(e) => toggleBookmark(prompt.id, e)}
+                            className="absolute top-1.5 xs:top-2 sm:top-3 right-1.5 xs:right-2 sm:right-3 bg-white/90 backdrop-blur-md p-1.5 xs:p-2 sm:p-2.5 rounded-full flex items-center justify-center shadow-sm border border-white/20 hover:bg-white hover:scale-110 transition-all duration-200"
+                          >
+                            <span className={`material-symbols-outlined text-[14px] xs:text-[16px] sm:text-[18px] transition-colors duration-200 ${
+                              bookmarkedPrompts.has(prompt.id) 
+                                ? 'text-primary fill-[1]' 
+                                : 'text-slate-400 hover:text-slate-600'
+                            }`}>
+                              {bookmarkedPrompts.has(prompt.id) ? 'bookmark' : 'bookmark_border'}
+                            </span>
+                          </button>
                         </div>
 
                         {/* Card Content Area */}
@@ -470,7 +610,7 @@ export default function Home() {
                           <div className="mt-auto pt-1 xs:pt-1.5 sm:pt-2 border-t border-slate-50">
                             <div className="flex items-center justify-between gap-2">
                               <div className="flex items-center gap-1.5 text-slate-400">
-                                <span className="material-symbols-outlined text-[8px] xs:text-[10px] sm:text-[12px]">thumb_up</span>
+                                <span className="material-symbols-outlined text-[8px] xs:text-[10px] sm:text-[12px]">favorite</span>
                                 <span className="text-[6px] xs:text-[7px] sm:text-[9px] font-bold leading-none">{(prompt as any).likes || '1.2k'}</span>
                                 <span className="material-symbols-outlined text-[8px] xs:text-[10px] sm:text-[12px]">download</span>
                                 <span className="text-[6px] xs:text-[7px] sm:text-[9px] font-bold leading-none">{(prompt as any).downloads || '840'}</span>

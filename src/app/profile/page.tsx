@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { promptData } from '@/lib/data';
 
 const profileData = {
     name: 'NeuralArchitect',
@@ -72,6 +73,21 @@ const userPrompts = [
 export default function Profile() {
     const [activeTab, setActiveTab] = useState<'latest' | 'popular'>('latest');
     const [activeSection, setActiveSection] = useState<'prompts' | 'sales'>('prompts');
+    const [bookmarkedPrompts, setBookmarkedPrompts] = useState<Set<number>>(new Set());
+
+    const toggleBookmark = (promptId: number, e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setBookmarkedPrompts(prev => {
+            const newSet = new Set(prev);
+            if (newSet.has(promptId)) {
+                newSet.delete(promptId);
+            } else {
+                newSet.add(promptId);
+            }
+            return newSet;
+        });
+    };
 
     return (
         <div className="flex-1 p-4 sm:p-6 lg:p-8 w-full">
@@ -82,6 +98,20 @@ export default function Profile() {
                 {/* Settings Icon */}
                 <button className="absolute top-6 right-6 p-2 rounded-lg hover:bg-slate-100 transition-colors z-20">
                     <span className="material-symbols-outlined text-slate-600 text-xl">settings</span>
+                </button>
+
+                {/* Sales Button */}
+                <button 
+                    onClick={() => setActiveSection('sales')}
+                    className={`absolute top-16 right-6 p-2 rounded-lg transition-colors z-20 ${
+                        activeSection === 'sales' 
+                            ? 'bg-primary text-white' 
+                            : 'hover:bg-slate-100'
+                    }`}
+                >
+                    <span className={`material-symbols-outlined text-xl ${
+                        activeSection === 'sales' ? 'text-white' : 'text-slate-600'
+                    }`}>sell</span>
                 </button>
 
                 <div className="flex flex-col md:flex-row gap-4 md:gap-8 items-center relative z-10">
@@ -122,29 +152,8 @@ export default function Profile() {
                 </div>
             </div>
 
-            {/* Section Switcher */}
-            <div className="flex items-center justify-center gap-2 mb-6 sm:mb-8">
-                <button
-                    onClick={() => setActiveSection('prompts')}
-                    className={`px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg font-medium transition-all text-sm sm:text-base ${activeSection === 'prompts'
-                        ? 'bg-primary text-white'
-                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                        }`}
-                >
-                    Prompts
-                </button>
-                <button
-                    onClick={() => setActiveSection('sales')}
-                    className={`px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg font-medium transition-all text-sm sm:text-base ${activeSection === 'sales'
-                        ? 'bg-primary text-white'
-                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                        }`}
-                >
-                    Sales
-                </button>
-            </div>
 
-            {/* Content Grid Section - Only show for prompts */}
+            {/* Prompts Section */}
             {activeSection === 'prompts' && (
                 <>
 
@@ -173,7 +182,7 @@ export default function Profile() {
                     </div>
 
                     {/* Prompt Grid */}
-                    <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3 sm:gap-4 md:gap-6">
+                    <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-5 gap-3 sm:gap-4 md:gap-6">
                         {/* Upload New Prompt Card */}
                         <Link href="/post-prompt" className="border-2 border-dashed border-primary/20 rounded-xl sm:rounded-2xl flex flex-col items-center justify-center p-6 sm:p-8 group hover:border-primary/50 transition-all cursor-pointer bg-primary/5">
                             <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-primary/10 flex items-center justify-center mb-3 sm:mb-4 group-hover:bg-primary/20 transition-all">
@@ -181,35 +190,63 @@ export default function Profile() {
                             </div>
                             <p className="font-bold text-slate-400 group-hover:text-primary transition-colors text-sm sm:text-base">Upload New Prompt</p>
                         </Link>
-                        {userPrompts.map((prompt) => (
-                            <div key={prompt.id} className="group bg-white rounded-xl sm:rounded-2xl overflow-hidden border border-slate-100 hover:border-primary/40 transition-all">
-                                <div className="aspect-video relative overflow-hidden">
-                                    <div
-                                        className="w-full h-full bg-cover bg-center group-hover:scale-110 transition-transform duration-500"
-                                        style={{ backgroundImage: `url(${prompt.image})` }}
-                                    />
-                                    <div className="absolute top-2 sm:top-3 left-2 sm:left-3 flex gap-2">
-                                        <span className="bg-black/60 backdrop-blur-md text-[8px] sm:text-[10px] text-white font-bold px-1.5 sm:px-2 py-0.5 sm:py-1 rounded uppercase tracking-wider">
-                                            {prompt.category}
-                                        </span>
+                        {promptData.slice(0, 5).map((prompt) => (
+                            <Link key={prompt.id} href={`/prompt/${prompt.id}`} className="block">
+                                <div className="prompt-card group bg-white rounded-lg xs:rounded-xl sm:rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-slate-100 flex flex-col h-full">
+                                    {/* Card Image Area */}
+                                    <div className="relative aspect-square overflow-hidden bg-slate-900">
+                                        <div
+                                            className="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100"
+                                            style={{ backgroundImage: `url(${prompt.image})` }}
+                                        />
+
+                                        {/* Bookmark Button */}
+                                        <button
+                                            onClick={(e) => toggleBookmark(prompt.id, e)}
+                                            className="absolute top-1.5 xs:top-2 sm:top-3 right-1.5 xs:right-2 sm:right-3 bg-white/90 backdrop-blur-md p-1.5 xs:p-2 sm:p-2.5 rounded-full flex items-center justify-center shadow-sm border border-white/20 hover:bg-white hover:scale-110 transition-all duration-200"
+                                        >
+                                            <span className={`material-symbols-outlined text-[14px] xs:text-[16px] sm:text-[18px] transition-colors duration-200 ${
+                                                bookmarkedPrompts.has(prompt.id) 
+                                                    ? 'text-primary fill-[1]' 
+                                                    : 'text-slate-400 hover:text-slate-600'
+                                            }`}>
+                                                {bookmarkedPrompts.has(prompt.id) ? 'bookmark' : 'bookmark_border'}
+                                            </span>
+                                        </button>
+                                    </div>
+
+                                    {/* Card Content Area */}
+                                    <div className="p-2 xs:p-2.5 sm:p-3 flex flex-col flex-1">
+                                        {/* Title & Price Row */}
+                                        <div className="flex justify-between items-start mb-1.5">
+                                            <h4 className="font-extrabold text-[10px] xs:text-sm sm:text-base text-slate-800 leading-tight group-hover:text-primary transition-colors flex-1 line-clamp-1 xs:line-clamp-2">
+                                                {prompt.title}
+                                            </h4>
+                                        </div>
+
+                                        {/* Description Text */}
+                                        <p className="text-slate-400 text-[9px] xs:text-xs sm:text-sm leading-relaxed line-clamp-1 xs:line-clamp-2 mb-1.5 xs:mb-2 sm:mb-3 font-medium">
+                                            {prompt.fullDescription}
+                                        </p>
+
+                                        {/* Footer Stats & Credit Price */}
+                                        <div className="mt-auto pt-1 xs:pt-1.5 sm:pt-2 border-t border-slate-50">
+                                            <div className="flex items-center justify-between gap-2">
+                                                <div className="flex items-center gap-1.5 text-slate-400">
+                                                    <span className="material-symbols-outlined text-[8px] xs:text-[10px] sm:text-[12px]">favorite</span>
+                                                    <span className="text-[6px] xs:text-[7px] sm:text-[9px] font-bold leading-none">{prompt.impact}</span>
+                                                    <span className="material-symbols-outlined text-[8px] xs:text-[10px] sm:text-[12px]">star</span>
+                                                    <span className="text-[6px] xs:text-[7px] sm:text-[9px] font-bold leading-none">4.9</span>
+                                                </div>
+                                                <div className="flex items-center gap-0.5 bg-primary/10 px-1.5 py-0.5 rounded-full flex-shrink-0">
+                                                    <span className="material-symbols-outlined text-primary text-[8px] xs:text-[9px] sm:text-[11px] fill-[1]">monetization_on</span>
+                                                    <span className="text-[6px] xs:text-[8px] sm:text-[10px] font-black text-primary">{prompt.price.split(' ')[0]}</span>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div className="p-3 sm:p-4 md:p-5">
-                                    <h4 className="font-bold text-sm sm:text-base md:text-lg mb-2 line-clamp-1 sm:line-clamp-2 group-hover:text-primary transition-colors">{prompt.title}</h4>
-                                    <p className="text-slate-500 text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-1 sm:line-clamp-2 leading-relaxed">{prompt.description}</p>
-                                    <div className="flex items-center justify-between pt-2 sm:pt-4 border-t border-slate-100">
-                                        <div className="flex items-center gap-1">
-                                            <span className="material-symbols-outlined text-amber-400 text-sm sm:text-base">star</span>
-                                            <span className="text-sm sm:text-base font-bold">{prompt.rating}</span>
-                                            <span className="text-xs text-slate-500 ml-1">({prompt.reviews})</span>
-                                        </div>
-                                        <div className="flex items-center gap-1">
-                                            <span className="text-base sm:text-lg font-bold text-primary">{prompt.price}</span>
-                                            <span className="text-[8px] sm:text-[10px] font-bold text-slate-400 uppercase tracking-tighter">Credits</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            </Link>
                         ))}
                     </div>
                 </>
