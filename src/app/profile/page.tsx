@@ -235,6 +235,8 @@ export default function Profile() {
                                                 <div className="flex items-center gap-1.5 text-slate-400">
                                                     <span className="material-symbols-outlined text-[8px] xs:text-[10px] sm:text-[12px]">favorite</span>
                                                     <span className="text-[6px] xs:text-[7px] sm:text-[9px] font-bold leading-none">{prompt.impact}</span>
+                                                    <span className="material-symbols-outlined text-[8px] xs:text-[10px] sm:text-[12px]">download</span>
+                                                    <span className="text-[6px] xs:text-[7px] sm:text-[9px] font-bold leading-none">{prompt.sales || '840'}</span>
                                                     <span className="material-symbols-outlined text-[8px] xs:text-[10px] sm:text-[12px]">star</span>
                                                     <span className="text-[6px] xs:text-[7px] sm:text-[9px] font-bold leading-none">4.9</span>
                                                 </div>
@@ -256,7 +258,15 @@ export default function Profile() {
             {activeSection === 'sales' && (
                 <>
 
-                    <div className="space-y-8">
+                    <div className="space-y-8 relative">
+                        {/* Close Button */}
+                        <button 
+                            onClick={() => setActiveSection('prompts')}
+                            className="absolute top-0 right-0 p-2 rounded-lg hover:bg-slate-100 transition-colors z-20"
+                        >
+                            <span className="material-symbols-outlined text-slate-600 text-xl">close</span>
+                        </button>
+
                         {/* Page Title & Subtitle */}
                         <div>
                             <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-slate-900">Internal Wallet</h1>
