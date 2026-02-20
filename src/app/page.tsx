@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import TrendingSidebar from '@/components/TrendingSidebar';
 
 const promptData = [
   {
@@ -286,9 +287,8 @@ export default function Home() {
         </div>
       )}
 
-      {/* Desktop Layout: Main Content Only */}
+      {/* Desktop Layout: Main Content with Sidebar */}
       <div className="flex flex-1">
-
         {/* Main Content Area */}
         <main className="flex-1 overflow-y-auto h-screen custom-scrollbar transition-all duration-300 lg:ml-16">
           <div className="w-full px-4 sm:px-6 lg:px-8">
@@ -646,6 +646,9 @@ export default function Home() {
             </section>
           </div>
         </main>
+        
+        {/* Trending Sidebar - Desktop Only */}
+        <TrendingSidebar />
       </div>
     </div>
   );
