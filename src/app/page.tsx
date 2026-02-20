@@ -116,6 +116,19 @@ const filters: string[] = [
   'Top Rated'
 ];
 
+const verticalCategories = [
+  { name: 'All Categories', icon: 'apps', count: 156 },
+  { name: 'Midjourney', icon: 'image', count: 45 },
+  { name: 'DALL-E 3', icon: 'brush', count: 32 },
+  { name: 'GPT-4', icon: 'psychology', count: 28 },
+  { name: 'Claude', icon: 'chat', count: 24 },
+  { name: 'Stable Diffusion', icon: 'auto_awesome', count: 27 },
+  { name: 'Architecture', icon: 'domain', count: 18 },
+  { name: 'Nature', icon: 'eco', count: 15 },
+  { name: 'Abstract', icon: 'grain', count: 12 },
+  { name: 'Coding', icon: 'code', count: 21 }
+];
+
 export default function Home() {
   const [activeTab, setActiveTab] = useState('All Prompts');
   const [showMobileFilters, setShowMobileFilters] = useState(false);
@@ -125,6 +138,7 @@ export default function Home() {
   const [selectedModels, setSelectedModels] = useState<string[]>([]);
   const [selectedReliability, setSelectedReliability] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState('Relevant');
+  const [showFiltersPanel, setShowFiltersPanel] = useState(false);
 
   // Filtering Logic
   const filteredPrompts = promptData.filter(prompt => {
@@ -240,104 +254,11 @@ export default function Home() {
         </div>
       )}
 
-      {/* Desktop Layout: Filters Sidebar + Main */}
+      {/* Desktop Layout: Main Content Only */}
       <div className="flex flex-1">
-        {/* Desktop Filters Sidebar */}
-        {showSidebar && (
-          <aside className="hidden lg:flex flex-col w-72 shrink-0 fixed top-0 left-24 h-screen border-r border-slate-100 bg-white pt-6 pb-6 overflow-y-auto custom-scrollbar z-40">
-            <div className="px-6 mb-6">
-            </div>
-            <div className="px-6 space-y-8">
-              {/* Sort By */}
-              <div>
-                <h4 className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-4">Sort By</h4>
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-sm text-slate-600 focus:ring-primary outline-none"
-                >
-                  <option>Relevant</option>
-                  <option>Price: Low to High</option>
-                  <option>Price: High to Low</option>
-                  <option>Top Rated</option>
-                </select>
-              </div>
-
-              {/* Categories */}
-              <div>
-                <h4 className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-4">Categories</h4>
-                <div className="space-y-3">
-                  {['Midjourney', 'DALL-E 3', 'GPT-4', 'Claude', 'Stable Diffusion'].map((cat) => (
-                    <label key={cat} className="flex items-center gap-4 cursor-pointer group">
-                      <input
-                        type="checkbox"
-                        checked={selectedCategories.includes(cat)}
-                        onChange={() => toggleCategory(cat)}
-                        className="w-5 h-5 text-primary border-slate-300 rounded focus:ring-primary"
-                      />
-                      <span className={`text-sm transition-colors ${selectedCategories.includes(cat) ? 'text-primary font-semibold' : 'text-slate-600 group-hover:text-slate-900'}`}>{cat}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              {/* Model */}
-              <div>
-                <h4 className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-4">Model</h4>
-                <div className="space-y-3">
-                  {['MIDJOURNEY V8', 'STABLE DIFFUSION 3', 'GPT-5 TURBO', 'DALL-E 4', 'MIDJOURNEY V7', 'CLAUDE 4 OPUS'].map((model) => (
-                    <label key={model} className="flex items-center gap-4 cursor-pointer group">
-                      <input
-                        type="checkbox"
-                        checked={selectedModels.includes(model)}
-                        onChange={() => toggleModel(model)}
-                        className="w-5 h-5 text-primary border-slate-300 rounded focus:ring-primary"
-                      />
-                      <span className={`text-sm transition-colors ${selectedModels.includes(model) ? 'text-primary font-semibold' : 'text-slate-600 group-hover:text-slate-900'}`}>{model}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              {/* Reliability */}
-              <div>
-                <h4 className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-4">Reliability</h4>
-                <div className="space-y-3">
-                  {['98% Reliability', '95% Reliability', '100% Reliable', '92% Reliability', '97% Reliability'].map((rel) => (
-                    <label key={rel} className="flex items-center gap-4 cursor-pointer group">
-                      <input
-                        type="checkbox"
-                        checked={selectedReliability.includes(rel)}
-                        onChange={() => toggleReliability(rel)}
-                        className="w-5 h-5 text-primary border-slate-300 rounded focus:ring-primary"
-                      />
-                      <span className={`text-sm transition-colors ${selectedReliability.includes(rel) ? 'text-primary font-semibold' : 'text-slate-600 group-hover:text-slate-900'}`}>{rel}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              
-              {/* Clear Filters */}
-              {(selectedCategories.length > 0 || selectedModels.length > 0 || selectedReliability.length > 0 || searchQuery) && (
-                <button
-                  onClick={() => {
-                    setSelectedCategories([]);
-                    setSelectedModels([]);
-                    setSelectedReliability([]);
-                    setSearchQuery('');
-                  }}
-                  className="w-full py-3 rounded-lg text-xs font-bold text-red-500 border border-red-200 hover:bg-red-50 transition-all"
-                >
-                  Clear All Filters
-                </button>
-              )}
-            </div>
-          </aside>
-        )}
 
         {/* Main Content Area */}
-        <main className={`flex-1 overflow-y-auto h-screen custom-scrollbar transition-all duration-300 ${showSidebar ? 'lg:ml-72' : 'lg:ml-16'}`}>
+        <main className="flex-1 overflow-y-auto h-screen custom-scrollbar transition-all duration-300 lg:ml-16">
           <div className="w-full px-4 sm:px-6 lg:px-8">
             {/* Mobile Top Navigation */}
             <nav className="lg:hidden sticky top-0 z-50 w-full glass-effect border-b border-white/20 mb-4">
@@ -405,22 +326,102 @@ export default function Home() {
               </div>
             </section>
 
-            {/* Quick Filter Tabs */}
-            <section className="mb-6 sm:mb-8">
-              <div className="flex gap-3 overflow-x-auto pb-4 custom-scrollbar whitespace-nowrap px-0">
-                {filters.map((filter) => (
+            {/* Filters Header and Panel */}
+            <section className="mb-8">
+              {/* Filters Header */}
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-4">
                   <button
-                    key={filter}
-                    onClick={() => setActiveTab(filter)}
-                    className={`px-6 py-2.5 rounded-full text-sm font-medium transition-colors ${activeTab === filter
-                      ? 'bg-primary text-white'
-                      : 'bg-white border border-slate-200 text-slate-600 hover:border-primary/50'
-                      }`}
+                    onClick={() => setShowFiltersPanel(!showFiltersPanel)}
+                    className="flex items-center gap-2 text-lg font-bold text-slate-800 hover:text-primary transition-colors"
                   >
-                    {filter}
+                    <span>Filters</span>
+                    <span className={`material-symbols-outlined transition-transform duration-200 ${showFiltersPanel ? 'rotate-180' : ''}`}>expand_more</span>
                   </button>
-                ))}
+                  {(selectedCategories.length > 0 || selectedModels.length > 0 || selectedReliability.length > 0) && (
+                    <span className="text-sm text-slate-500">
+                      {selectedCategories.length + selectedModels.length + selectedReliability.length} applied
+                    </span>
+                  )}
+                </div>
+                <button
+                  onClick={() => {
+                    setSelectedCategories([]);
+                    setSelectedModels([]);
+                    setSelectedReliability([]);
+                  }}
+                  className="text-sm text-primary font-medium hover:underline"
+                >
+                  Clear all
+                </button>
               </div>
+
+              {/* Filters Panel - Fiverr Style */}
+              {showFiltersPanel && (
+                <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {/* Categories Column */}
+                    <div>
+                      <h4 className="text-sm font-semibold text-slate-800 mb-2">Categories</h4>
+                      <div className="space-y-1">
+                        {['Midjourney', 'DALL-E 3', 'GPT-4', 'Claude', 'Stable Diffusion', 'Architecture', 'Nature', 'Abstract', 'Coding'].map((cat) => {
+                          const count = verticalCategories.find(c => c.name === cat)?.count || 0;
+                          return (
+                            <label key={cat} className="flex items-center justify-between cursor-pointer group p-1.5 rounded-lg hover:bg-slate-50 transition-colors">
+                              <div className="flex items-center gap-2">
+                                <input
+                                  type="checkbox"
+                                  checked={selectedCategories.includes(cat)}
+                                  onChange={() => toggleCategory(cat)}
+                                  className="w-3.5 h-3.5 text-primary border-slate-300 rounded focus:ring-primary"
+                                />
+                                <span className={`text-sm transition-colors ${selectedCategories.includes(cat) ? 'text-primary font-semibold' : 'text-slate-600 group-hover:text-slate-900'}`}>{cat}</span>
+                              </div>
+                              <span className="text-xs text-slate-400">{count}</span>
+                            </label>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* Models Column */}
+                    <div>
+                      <h4 className="text-sm font-semibold text-slate-800 mb-2">Models</h4>
+                      <div className="space-y-1">
+                        {['MIDJOURNEY V8', 'STABLE DIFFUSION 3', 'GPT-5 TURBO', 'DALL-E 4', 'MIDJOURNEY V7', 'CLAUDE 4 OPUS'].map((model) => (
+                          <label key={model} className="flex items-center gap-2 cursor-pointer group p-1.5 rounded-lg hover:bg-slate-50 transition-colors">
+                            <input
+                              type="checkbox"
+                              checked={selectedModels.includes(model)}
+                              onChange={() => toggleModel(model)}
+                              className="w-3.5 h-3.5 text-primary border-slate-300 rounded focus:ring-primary"
+                            />
+                            <span className={`text-sm transition-colors ${selectedModels.includes(model) ? 'text-primary font-semibold' : 'text-slate-600 group-hover:text-slate-900'}`}>{model}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Reliability Column */}
+                    <div>
+                      <h4 className="text-sm font-semibold text-slate-800 mb-2">Reliability</h4>
+                      <div className="space-y-1">
+                        {['100% Reliable', '98% Reliability', '97% Reliability', '95% Reliability', '92% Reliability'].map((rel) => (
+                          <label key={rel} className="flex items-center gap-2 cursor-pointer group p-1.5 rounded-lg hover:bg-slate-50 transition-colors">
+                            <input
+                              type="checkbox"
+                              checked={selectedReliability.includes(rel)}
+                              onChange={() => toggleReliability(rel)}
+                              className="w-3.5 h-3.5 text-primary border-slate-300 rounded focus:ring-primary"
+                            />
+                            <span className={`text-sm transition-colors ${selectedReliability.includes(rel) ? 'text-primary font-semibold' : 'text-slate-600 group-hover:text-slate-900'}`}>{rel}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </section>
 
             {/* Prompt Grid */}
@@ -449,39 +450,34 @@ export default function Home() {
                             <span className="text-[6px] xs:text-[8px] sm:text-[10px] font-black tracking-tighter text-slate-700 uppercase hidden xs:inline sm:inline">{(prompt as any).model}</span>
                             <span className="text-[6px] xs:text-[8px] sm:text-[10px] font-black tracking-tighter text-slate-700 uppercase xs:hidden sm:hidden">{(prompt as any).model?.split(' ')[0] || 'AI'}</span>
                           </div>
-
-                          {/* Bottom Left Category Badge */}
-                          <div className="absolute bottom-2 xs:bottom-3 sm:bottom-4 left-2 xs:left-3 sm:left-4 bg-primary px-1.5 xs:px-2.5 sm:px-4 py-0.6 xs:py-1 sm:py-1.5 rounded-lg shadow-lg">
-                            <span className="text-[7px] xs:text-[9px] sm:text-[11px] font-bold text-white uppercase tracking-wider">{prompt.category}</span>
-                          </div>
                         </div>
 
                         {/* Card Content Area */}
-                        <div className="p-2 xs:p-3 sm:p-4 md:p-5 flex flex-col flex-1">
+                        <div className="p-2 xs:p-2.5 sm:p-3 flex flex-col flex-1">
                           {/* Title & Price Row */}
-                          <div className="flex justify-between items-start mb-2">
-                            <h4 className="font-extrabold text-[10px] xs:text-sm sm:text-base md:text-lg text-slate-800 leading-tight group-hover:text-primary transition-colors flex-1 line-clamp-1 xs:line-clamp-2 sm:line-clamp-2">
+                          <div className="flex justify-between items-start mb-1.5">
+                            <h4 className="font-extrabold text-[10px] xs:text-sm sm:text-base text-slate-800 leading-tight group-hover:text-primary transition-colors flex-1 line-clamp-1 xs:line-clamp-2">
                               {prompt.title}
                             </h4>
                           </div>
 
                           {/* Description Text */}
-                          <p className="text-slate-400 text-[9px] xs:text-xs sm:text-sm leading-relaxed line-clamp-1 xs:line-clamp-2 sm:line-clamp-2 mb-2 xs:mb-3 sm:mb-6 font-medium">
+                          <p className="text-slate-400 text-[9px] xs:text-xs sm:text-sm leading-relaxed line-clamp-1 xs:line-clamp-2 mb-1.5 xs:mb-2 sm:mb-3 font-medium">
                             {(prompt as any).description || 'Highly detailed prompt for photorealistic architectural glass and neon elements...'}
                           </p>
 
                           {/* Footer Stats & Credit Price */}
-                          <div className="mt-auto pt-1.5 xs:pt-2 sm:pt-4 border-t border-slate-50">
+                          <div className="mt-auto pt-1 xs:pt-1.5 sm:pt-2 border-t border-slate-50">
                             <div className="flex items-center justify-between gap-2">
-                              <div className="flex items-center gap-2 text-slate-400">
-                                <span className="material-symbols-outlined text-[9px] xs:text-[12px] sm:text-[14px]">thumb_up</span>
-                                <span className="text-[6px] xs:text-[8px] sm:text-[10px] font-bold leading-none">{(prompt as any).likes || '1.2k'}</span>
-                                <span className="material-symbols-outlined text-[9px] xs:text-[12px] sm:text-[14px]">download</span>
-                                <span className="text-[6px] xs:text-[8px] sm:text-[10px] font-bold leading-none">{(prompt as any).downloads || '840'}</span>
+                              <div className="flex items-center gap-1.5 text-slate-400">
+                                <span className="material-symbols-outlined text-[8px] xs:text-[10px] sm:text-[12px]">thumb_up</span>
+                                <span className="text-[6px] xs:text-[7px] sm:text-[9px] font-bold leading-none">{(prompt as any).likes || '1.2k'}</span>
+                                <span className="material-symbols-outlined text-[8px] xs:text-[10px] sm:text-[12px]">download</span>
+                                <span className="text-[6px] xs:text-[7px] sm:text-[9px] font-bold leading-none">{(prompt as any).downloads || '840'}</span>
                               </div>
-                              <div className="flex items-center gap-1 bg-primary/10 px-2 py-1 rounded-full flex-shrink-0">
-                                <span className="material-symbols-outlined text-primary text-[9px] xs:text-[11px] sm:text-[13px] fill-[1]">monetization_on</span>
-                                <span className="text-[7px] xs:text-[9px] sm:text-[11px] font-black text-primary">{prompt.price}</span>
+                              <div className="flex items-center gap-0.5 bg-primary/10 px-1.5 py-0.5 rounded-full flex-shrink-0">
+                                <span className="material-symbols-outlined text-primary text-[8px] xs:text-[9px] sm:text-[11px] fill-[1]">monetization_on</span>
+                                <span className="text-[6px] xs:text-[8px] sm:text-[10px] font-black text-primary">{prompt.price}</span>
                               </div>
                             </div>
                           </div>

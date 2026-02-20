@@ -70,202 +70,176 @@ const userPrompts = [
 
 
 export default function Profile() {
-    const [activeTab, setActiveTab] = useState('latest');
-    const [activeSection, setActiveSection] = useState('dashboard');
+    const [activeTab, setActiveTab] = useState<'latest' | 'popular'>('latest');
+    const [activeSection, setActiveSection] = useState<'prompts' | 'sales'>('prompts');
 
     return (
-        <div className="flex flex-1">
-            {/* Sidebar */}
-            <aside className="w-72 border-r border-primary/10 bg-white/50 hidden lg:flex flex-col sticky top-0 h-screen p-6">
-                <nav className="space-y-1 mb-8">
-                    <button
-                        onClick={() => setActiveSection('dashboard')}
-                        className={`flex items-center gap-3 px-3 py-2.5 rounded-lg font-medium transition-all ${activeSection === 'dashboard'
-                                ? 'bg-primary/10 text-primary'
-                                : 'text-slate-500 hover:bg-primary/5 hover:text-primary'
-                            }`}
-                    >
-                        <span className="material-symbols-outlined text-xl">dashboard</span>
-                        Dashboard
-                    </button>
-                    <button
-                        onClick={() => setActiveSection('sales')}
-                        className={`flex items-center gap-3 px-3 py-2.5 rounded-lg font-medium transition-all ${activeSection === 'sales'
-                                ? 'bg-primary/10 text-primary'
-                                : 'text-slate-500 hover:bg-primary/5 hover:text-primary'
-                            }`}
-                    >
-                        <span className="material-symbols-outlined text-xl">analytics</span>
-                        My Sales
-                    </button>
-                    <button
-                        onClick={() => setActiveSection('settings')}
-                        className={`flex items-center gap-3 px-3 py-2.5 rounded-lg font-medium transition-all ${activeSection === 'settings'
-                                ? 'bg-primary/10 text-primary'
-                                : 'text-slate-500 hover:bg-primary/5 hover:text-primary'
-                            }`}
-                    >
-                        <span className="material-symbols-outlined text-xl">settings</span>
-                        Settings
-                    </button>
-                </nav>
+        <div className="flex-1 p-4 sm:p-6 lg:p-8 w-full">
+            {/* Profile Header */}
+            <div className="bg-white rounded-2xl p-4 sm:p-6 lg:p-8 mb-6 sm:mb-8 lg:mb-10 relative overflow-hidden border border-slate-100">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -mr-20 -mt-20"></div>
 
+                {/* Settings Icon */}
+                <button className="absolute top-6 right-6 p-2 rounded-lg hover:bg-slate-100 transition-colors z-20">
+                    <span className="material-symbols-outlined text-slate-600 text-xl">settings</span>
+                </button>
 
-                {/* Wallet Widget */}
-                <div className="bg-primary/5 border border-primary/20 rounded-xl p-5 mt-auto">
-                    <div className="flex items-center justify-between mb-4">
-                        <span className="text-sm text-slate-400 font-medium">Your Balance</span>
-                        <span className="material-symbols-outlined text-primary text-sm">account_balance_wallet</span>
+                <div className="flex flex-col md:flex-row gap-4 md:gap-8 items-center relative z-10">
+                    {/* Avatar */}
+                    <div className="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-2xl overflow-hidden border-4 border-primary/20 p-1 bg-white">
+                        <div
+                            className="w-full h-full object-cover rounded-xl bg-cover bg-center"
+                            style={{ backgroundImage: 'url(https://lh3.googleusercontent.com/aida-public/AB6AXuA5NVkO5I5Y5ADmTu5nHMEiGCYl68Vq3XbAUO40vdKlbhDYxoE2wCfDFQLp88bR26qaiQKfBx0CDZdmyilOhB3evvEwvUfMQOnybArTv4owqwuNhYytyh9Jie5Qwwt5sTJRDpFuPtY7YRKZgkMyg63f7lnBCxAx7PagW6kMcpuXyqEgc3hwXhJcGAvMUfRyvP66ChahF-zXw_EnLTWmiLNRBAvbEpMuwoza7OWgMk3-XHxmuQkB9cIG-Y_oj3LCkt6ztRl7DpxKLpo)' }}
+                        />
                     </div>
-                    <div className="flex items-baseline gap-2 mb-4">
-                        <span className="text-3xl font-bold text-slate-800">{profileData.balance}</span>
-                        <span className="text-sm text-primary font-bold tracking-widest uppercase">Credits</span>
-                    </div>
-                    <button className="w-full bg-primary hover:bg-primary/90 text-white py-2.5 rounded-lg font-bold text-sm transition-all flex items-center justify-center gap-2">
-                        <span className="material-symbols-outlined text-base">add_circle_outline</span>
-                        Top Up
-                    </button>
-                </div>
 
-            </aside>
-
-            {/* Main Content */}
-            <main className="flex-1 p-8 max-w-7xl mx-auto">
-                {/* Profile Header */}
-                <div className="bg-white rounded-2xl p-8 mb-10 relative overflow-hidden border border-slate-100">
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -mr-20 -mt-20"></div>
-                    <div className="flex flex-col md:flex-row gap-8 items-center relative z-10">
-                        {/* Avatar */}
-                        <div className="w-32 h-32 rounded-2xl overflow-hidden border-4 border-primary/20 p-1 bg-white">
-                            <div
-                                className="w-full h-full object-cover rounded-xl bg-cover bg-center"
-                                style={{ backgroundImage: 'url(https://lh3.googleusercontent.com/aida-public/AB6AXuA5NVkO5I5Y5ADmTu5nHMEiGCYl68Vq3XbAUO40vdKlbhDYxoE2wCfDFQLp88bR26qaiQKfBx0CDZdmyilOhB3evvEwvUfMQOnybArTv4owqwuNhYytyh9Jie5Qwwt5sTJRDpFuPtY7YRKZgkMyg63f7lnBCxAx7PagW6kMcpuXyqEgc3hwXhJcGAvMUfRyvP66ChahF-zXw_EnLTWmiLNRBAvbEpMuwoza7OWgMk3-XHxmuQkB9cIG-Y_oj3LCkt6ztRl7DpxKLpo)' }}
-                            />
+                    {/* User Info */}
+                    <div className="flex-1 text-center md:text-left">
+                        <div className="flex flex-col md:flex-row md:items-center gap-3 mb-2">
+                            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold">{profileData.name}</h2>
                         </div>
-
-                        {/* User Info */}
-                        <div className="flex-1 text-center md:text-left">
-                            <div className="flex flex-col md:flex-row md:items-center gap-3 mb-2">
-                                <h2 className="text-3xl font-bold">{profileData.name}</h2>
+                        <p className="text-slate-500 max-w-full sm:max-w-lg lg:max-w-xl mb-4 sm:mb-6 text-sm sm:text-base">{profileData.bio}</p>
+                        <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 sm:gap-6 lg:gap-8">
+                            <div className="text-center md:text-left">
+                                <p className="text-slate-400 text-xs font-medium uppercase tracking-wider mb-1">Total Prompts</p>
+                                <p className="text-xl sm:text-2xl font-bold">{profileData.stats.totalPrompts}</p>
                             </div>
-                            <p className="text-slate-500 max-w-xl mb-6">{profileData.bio}</p>
-                            <div className="flex flex-wrap items-center justify-center md:justify-start gap-8">
-                                <div className="text-center md:text-left">
-                                    <p className="text-slate-400 text-xs font-medium uppercase tracking-wider mb-1">Total Prompts</p>
-                                    <p className="text-2xl font-bold">{profileData.stats.totalPrompts}</p>
+                            <div className="w-px h-10 bg-primary/20"></div>
+                            <div className="text-center md:text-left">
+                                <p className="text-slate-400 text-xs font-medium uppercase tracking-wider mb-1">Credits Earned</p>
+                                <p className="text-xl sm:text-2xl font-bold text-primary">{profileData.stats.creditsEarned}</p>
+                            </div>
+                            <div className="w-px h-10 bg-primary/20"></div>
+                            <div className="text-center md:text-left">
+                                <p className="text-slate-400 text-xs font-medium uppercase tracking-wider mb-1">Avg. Rating</p>
+                                <div className="flex items-center gap-2">
+                                    <p className="text-xl sm:text-2xl font-bold">{profileData.stats.avgRating}</p>
+                                    <span className="material-symbols-outlined text-amber-400 text-xl">star</span>
                                 </div>
-                                <div className="w-px h-10 bg-primary/20"></div>
-                                <div className="text-center md:text-left">
-                                    <p className="text-slate-400 text-xs font-medium uppercase tracking-wider mb-1">Credits Earned</p>
-                                    <p className="text-2xl font-bold text-primary">{profileData.stats.creditsEarned}</p>
-                                </div>
-                                <div className="w-px h-10 bg-primary/20"></div>
-                                <div className="text-center md:text-left">
-                                    <p className="text-slate-400 text-xs font-medium uppercase tracking-wider mb-1">Avg. Rating</p>
-                                    <div className="flex items-center gap-2">
-                                        <p className="text-2xl font-bold">{profileData.stats.avgRating}</p>
-                                        <span className="material-symbols-outlined text-amber-400 text-xl">star</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Section Switcher */}
+            <div className="flex items-center justify-center gap-2 mb-6 sm:mb-8">
+                <button
+                    onClick={() => setActiveSection('prompts')}
+                    className={`px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg font-medium transition-all text-sm sm:text-base ${activeSection === 'prompts'
+                        ? 'bg-primary text-white'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                        }`}
+                >
+                    Prompts
+                </button>
+                <button
+                    onClick={() => setActiveSection('sales')}
+                    className={`px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg font-medium transition-all text-sm sm:text-base ${activeSection === 'sales'
+                        ? 'bg-primary text-white'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                        }`}
+                >
+                    Sales
+                </button>
+            </div>
+
+            {/* Content Grid Section - Only show for prompts */}
+            {activeSection === 'prompts' && (
+                <>
+
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 sm:mb-8">
+                        <h3 className="text-3xl sm:text-4xl font-bold tracking-tight text-slate-900">Published Prompts</h3>
+                        <div className="flex items-center gap-2">
+                            <button
+                                onClick={() => setActiveTab('latest')}
+                                className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium border transition-all ${activeTab === 'latest'
+                                    ? 'bg-primary text-white border-primary'
+                                    : 'bg-white border-slate-200 text-slate-600 hover:border-primary/30'
+                                    }`}
+                            >
+                                Latest
+                            </button>
+                            <button
+                                onClick={() => setActiveTab('popular')}
+                                className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium border transition-all ${activeTab === 'popular'
+                                    ? 'bg-primary text-white border-primary'
+                                    : 'bg-white border-slate-200 text-slate-600 hover:border-primary/30'
+                                    }`}
+                            >
+                                Most Popular
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Prompt Grid */}
+                    <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3 sm:gap-4 md:gap-6">
+                        {/* Upload New Prompt Card */}
+                        <Link href="/post-prompt" className="border-2 border-dashed border-primary/20 rounded-xl sm:rounded-2xl flex flex-col items-center justify-center p-6 sm:p-8 group hover:border-primary/50 transition-all cursor-pointer bg-primary/5">
+                            <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-primary/10 flex items-center justify-center mb-3 sm:mb-4 group-hover:bg-primary/20 transition-all">
+                                <span className="material-symbols-outlined text-primary text-2xl sm:text-3xl">add</span>
+                            </div>
+                            <p className="font-bold text-slate-400 group-hover:text-primary transition-colors text-sm sm:text-base">Upload New Prompt</p>
+                        </Link>
+                        {userPrompts.map((prompt) => (
+                            <div key={prompt.id} className="group bg-white rounded-xl sm:rounded-2xl overflow-hidden border border-slate-100 hover:border-primary/40 transition-all">
+                                <div className="aspect-video relative overflow-hidden">
+                                    <div
+                                        className="w-full h-full bg-cover bg-center group-hover:scale-110 transition-transform duration-500"
+                                        style={{ backgroundImage: `url(${prompt.image})` }}
+                                    />
+                                    <div className="absolute top-2 sm:top-3 left-2 sm:left-3 flex gap-2">
+                                        <span className="bg-black/60 backdrop-blur-md text-[8px] sm:text-[10px] text-white font-bold px-1.5 sm:px-2 py-0.5 sm:py-1 rounded uppercase tracking-wider">
+                                            {prompt.category}
+                                        </span>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-                {/* Content Grid Section - Only show for dashboard */}
-                {activeSection === 'dashboard' && (
-                    <>
-                        <div className="flex items-center justify-between mb-8">
-                            <h3 className="text-xl font-bold">Published Prompts</h3>
-                            <div className="flex items-center gap-2">
-                                <button
-                                    onClick={() => setActiveTab('latest')}
-                                    className={`px-4 py-2 rounded-lg text-sm font-medium border transition-all ${activeTab === 'latest'
-                                        ? 'bg-primary text-white border-primary'
-                                        : 'bg-white border-slate-200 text-slate-600 hover:border-primary/30'
-                                        }`}
-                                >
-                                    Latest
-                                </button>
-                                <button
-                                    onClick={() => setActiveTab('popular')}
-                                    className={`px-4 py-2 rounded-lg text-sm font-medium border transition-all ${activeTab === 'popular'
-                                        ? 'bg-primary text-white border-primary'
-                                        : 'bg-white border-slate-200 text-slate-600 hover:border-primary/30'
-                                        }`}
-                                >
-                                    Most Popular
-                                </button>
-                            </div>
-                        </div>
-
-                        {/* Prompt Grid */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
-                            {/* Upload New Prompt Card */}
-                            <Link href="/post-prompt" className="border-2 border-dashed border-primary/20 rounded-xl sm:rounded-2xl flex flex-col items-center justify-center p-6 sm:p-8 group hover:border-primary/50 transition-all cursor-pointer bg-primary/5">
-                                <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-primary/10 flex items-center justify-center mb-3 sm:mb-4 group-hover:bg-primary/20 transition-all">
-                                    <span className="material-symbols-outlined text-primary text-2xl sm:text-3xl">add</span>
-                                </div>
-                                <p className="font-bold text-slate-400 group-hover:text-primary transition-colors text-sm sm:text-base">Upload New Prompt</p>
-                            </Link>
-                            {userPrompts.map((prompt) => (
-                                <div key={prompt.id} className="group bg-white rounded-xl sm:rounded-2xl overflow-hidden border border-slate-100 hover:border-primary/40 transition-all">
-                                    <div className="aspect-video relative overflow-hidden">
-                                        <div
-                                            className="w-full h-full bg-cover bg-center group-hover:scale-110 transition-transform duration-500"
-                                            style={{ backgroundImage: `url(${prompt.image})` }}
-                                        />
-                                        <div className="absolute top-2 sm:top-3 left-2 sm:left-3 flex gap-2">
-                                            <span className="bg-black/60 backdrop-blur-md text-[8px] sm:text-[10px] text-white font-bold px-1.5 sm:px-2 py-0.5 sm:py-1 rounded uppercase tracking-wider">
-                                                {prompt.category}
-                                            </span>
+                                <div className="p-3 sm:p-4 md:p-5">
+                                    <h4 className="font-bold text-sm sm:text-base md:text-lg mb-2 line-clamp-1 sm:line-clamp-2 group-hover:text-primary transition-colors">{prompt.title}</h4>
+                                    <p className="text-slate-500 text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-1 sm:line-clamp-2 leading-relaxed">{prompt.description}</p>
+                                    <div className="flex items-center justify-between pt-2 sm:pt-4 border-t border-slate-100">
+                                        <div className="flex items-center gap-1">
+                                            <span className="material-symbols-outlined text-amber-400 text-sm sm:text-base">star</span>
+                                            <span className="text-sm sm:text-base font-bold">{prompt.rating}</span>
+                                            <span className="text-xs text-slate-500 ml-1">({prompt.reviews})</span>
                                         </div>
-                                    </div>
-                                    <div className="p-3 sm:p-4 md:p-5">
-                                        <h4 className="font-bold text-sm sm:text-base md:text-lg mb-2 line-clamp-1 sm:line-clamp-2 group-hover:text-primary transition-colors">{prompt.title}</h4>
-                                        <p className="text-slate-500 text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-1 sm:line-clamp-2 leading-relaxed">{prompt.description}</p>
-                                        <div className="flex items-center justify-between pt-2 sm:pt-4 border-t border-slate-100">
-                                            <div className="flex items-center gap-1">
-                                                <span className="material-symbols-outlined text-amber-400 text-sm sm:text-base">star</span>
-                                                <span className="text-sm sm:text-base font-bold">{prompt.rating}</span>
-                                                <span className="text-xs text-slate-500 ml-1">({prompt.reviews})</span>
-                                            </div>
-                                            <div className="flex items-center gap-1">
-                                                <span className="text-base sm:text-lg font-bold text-primary">{prompt.price}</span>
-                                                <span className="text-[8px] sm:text-[10px] font-bold text-slate-400 uppercase tracking-tighter">Credits</span>
-                                            </div>
+                                        <div className="flex items-center gap-1">
+                                            <span className="text-base sm:text-lg font-bold text-primary">{prompt.price}</span>
+                                            <span className="text-[8px] sm:text-[10px] font-bold text-slate-400 uppercase tracking-tighter">Credits</span>
                                         </div>
                                     </div>
                                 </div>
-                            ))}
-                        </div>
-                    </>
-                )}
+                            </div>
+                        ))}
+                    </div>
+                </>
+            )}
 
-                {/* Sales Section */}
-                {activeSection === 'sales' && (
+            {/* Sales Section */}
+            {activeSection === 'sales' && (
+                <>
+
                     <div className="space-y-8">
                         {/* Page Title & Subtitle */}
                         <div>
-                            <h1 className="text-4xl font-bold tracking-tight text-slate-900">Internal Wallet</h1>
-                            <p className="text-slate-500 mt-2 text-lg">Track your earnings and usage across the marketplace.</p>
+                            <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-slate-900">Internal Wallet</h1>
+                            <p className="text-slate-500 mt-2 text-base sm:text-lg">Track your earnings and usage across the marketplace.</p>
                         </div>
 
                         {/* Dashboard Grid */}
-                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 lg:gap-8">
                             {/* Main Balance & Trend Section */}
-                            <div className="lg:col-span-2 space-y-8">
+                            <div className="xl:col-span-2 space-y-6 lg:space-y-8">
                                 {/* Credits Hero Card */}
-                                <div className="bg-primary rounded-2xl p-8 text-white shadow-xl shadow-primary/20 relative overflow-hidden">
+                                <div className="bg-primary rounded-2xl p-6 sm:p-8 text-white shadow-xl shadow-primary/20 relative overflow-hidden">
                                     <div className="absolute top-0 right-0 p-8 opacity-10">
                                         <span className="material-symbols-outlined text-9xl">account_balance_wallet</span>
                                     </div>
                                     <div className="relative z-10">
                                         <p className="text-primary-100 text-sm font-medium uppercase tracking-widest opacity-80">Available Credits</p>
                                         <div className="mt-4 flex items-baseline gap-2">
-                                            <span className="text-6xl font-bold tracking-tighter">{profileData.balance}.00</span>
-                                            <span className="text-2xl font-medium opacity-70">CR</span>
+                                            <span className="text-5xl sm:text-6xl font-bold tracking-tighter">{profileData.balance}.00</span>
+                                            <span className="text-xl sm:text-2xl font-medium opacity-70">CR</span>
                                         </div>
                                         <div className="mt-8 flex items-center gap-4">
                                             <div className="bg-white/20 backdrop-blur-md rounded-lg px-3 py-1.5 flex items-center gap-2">
@@ -277,7 +251,7 @@ export default function Profile() {
                                 </div>
 
                                 {/* Trend Visualization */}
-                                <div className="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm">
+                                <div className="bg-white rounded-2xl p-4 sm:p-6 border border-slate-100 shadow-sm">
                                     <div className="flex items-center justify-between mb-6">
                                         <h3 className="text-slate-800 font-bold">Credit Activity (30 Days)</h3>
                                         <div className="flex gap-2">
@@ -308,23 +282,23 @@ export default function Profile() {
                             </div>
 
                             {/* Transaction Sidebar */}
-                            <div className="lg:col-span-1 space-y-6">
+                            <div className="xl:col-span-1 space-y-6">
                                 <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden flex flex-col h-full">
-                                    <div className="p-6 border-b border-slate-50 flex items-center justify-between">
-                                        <h3 className="text-slate-800 font-bold">Recent Activity</h3>
-                                        <button className="text-primary text-sm font-semibold hover:underline">View All</button>
+                                    <div className="p-4 sm:p-6 border-b border-slate-50 flex items-center justify-between">
+                                        <h3 className="text-slate-800 font-bold text-sm sm:text-base">Recent Activity</h3>
+                                        <button className="text-primary text-sm font-semibold hover:underline text-xs sm:text-sm">View All</button>
                                     </div>
                                     <div className="divide-y divide-slate-50 overflow-y-auto max-h-[500px]">
                                         {/* Transaction Item 1 */}
-                                        <div className="p-5 hover:bg-slate-50/80 transition-colors group">
+                                        <div className="p-3 sm:p-5 hover:bg-slate-50/80 transition-colors group">
                                             <div className="flex items-start justify-between">
                                                 <div className="flex items-center gap-3">
-                                                    <div className="size-10 rounded-xl bg-red-50 text-red-500 flex items-center justify-center">
-                                                        <span className="material-symbols-outlined text-lg">shopping_cart</span>
+                                                    <div className="size-8 sm:size-10 rounded-xl bg-red-50 text-red-500 flex items-center justify-center">
+                                                        <span className="material-symbols-outlined text-sm sm:text-lg">shopping_cart</span>
                                                     </div>
                                                     <div>
-                                                        <p className="text-sm font-bold text-slate-800 group-hover:text-primary transition-colors">Cyberpunk Portrait</p>
-                                                        <p className="text-[11px] text-slate-400 font-medium mt-0.5">Prompt Purchase • Today</p>
+                                                        <p className="text-xs sm:text-sm font-bold text-slate-800 group-hover:text-primary transition-colors">Cyberpunk Portrait</p>
+                                                        <p className="text-[10px] sm:text-[11px] text-slate-400 font-medium mt-0.5">Prompt Purchase • Today</p>
                                                     </div>
                                                 </div>
                                                 <div className="text-right">
@@ -334,15 +308,15 @@ export default function Profile() {
                                             </div>
                                         </div>
                                         {/* Transaction Item 2 */}
-                                        <div className="p-5 hover:bg-slate-50/80 transition-colors group">
+                                        <div className="p-3 sm:p-5 hover:bg-slate-50/80 transition-colors group">
                                             <div className="flex items-start justify-between">
                                                 <div className="flex items-center gap-3">
-                                                    <div className="size-10 rounded-xl bg-emerald-50 text-emerald-500 flex items-center justify-center">
-                                                        <span className="material-symbols-outlined text-lg">sell</span>
+                                                    <div className="size-8 sm:size-10 rounded-xl bg-emerald-50 text-emerald-500 flex items-center justify-center">
+                                                        <span className="material-symbols-outlined text-sm sm:text-lg">sell</span>
                                                     </div>
                                                     <div>
-                                                        <p className="text-sm font-bold text-slate-800 group-hover:text-primary transition-colors">Minimalist Logo Gen</p>
-                                                        <p className="text-[11px] text-slate-400 font-medium mt-0.5">Sale Earning • Yesterday</p>
+                                                        <p className="text-xs sm:text-sm font-bold text-slate-800 group-hover:text-primary transition-colors">Minimalist Logo Gen</p>
+                                                        <p className="text-[10px] sm:text-[11px] text-slate-400 font-medium mt-0.5">Sale Earning • Yesterday</p>
                                                     </div>
                                                 </div>
                                                 <div className="text-right">
@@ -352,15 +326,15 @@ export default function Profile() {
                                             </div>
                                         </div>
                                         {/* Transaction Item 3 */}
-                                        <div className="p-5 hover:bg-slate-50/80 transition-colors group">
+                                        <div className="p-3 sm:p-5 hover:bg-slate-50/80 transition-colors group">
                                             <div className="flex items-start justify-between">
                                                 <div className="flex items-center gap-3">
-                                                    <div className="size-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
-                                                        <span className="material-symbols-outlined text-lg">card_giftcard</span>
+                                                    <div className="size-8 sm:size-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
+                                                        <span className="material-symbols-outlined text-sm sm:text-lg">card_giftcard</span>
                                                     </div>
                                                     <div>
-                                                        <p className="text-sm font-bold text-slate-800 group-hover:text-primary transition-colors">Marketplace Reward</p>
-                                                        <p className="text-[11px] text-slate-400 font-medium mt-0.5">Platform Bonus • 2d ago</p>
+                                                        <p className="text-xs sm:text-sm font-bold text-slate-800 group-hover:text-primary transition-colors">Marketplace Reward</p>
+                                                        <p className="text-[10px] sm:text-[11px] text-slate-400 font-medium mt-0.5">Platform Bonus • 2d ago</p>
                                                     </div>
                                                 </div>
                                                 <div className="text-right">
@@ -369,44 +343,8 @@ export default function Profile() {
                                                 </div>
                                             </div>
                                         </div>
-                                        {/* Transaction Item 4 */}
-                                        <div className="p-5 hover:bg-slate-50/80 transition-colors group">
-                                            <div className="flex items-start justify-between">
-                                                <div className="flex items-center gap-3">
-                                                    <div className="size-10 rounded-xl bg-emerald-50 text-emerald-500 flex items-center justify-center">
-                                                        <span className="material-symbols-outlined text-lg">sell</span>
-                                                    </div>
-                                                    <div>
-                                                        <p className="text-sm font-bold text-slate-800 group-hover:text-primary transition-colors">Abstract Art Suite</p>
-                                                        <p className="text-[11px] text-slate-400 font-medium mt-0.5">Sale Earning • 3d ago</p>
-                                                    </div>
-                                                </div>
-                                                <div className="text-right">
-                                                    <p className="text-sm font-bold text-emerald-500">+120.00</p>
-                                                    <p className="text-[10px] text-slate-400 uppercase font-bold">CR</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        {/* Transaction Item 5 */}
-                                        <div className="p-5 hover:bg-slate-50/80 transition-colors group">
-                                            <div className="flex items-start justify-between">
-                                                <div className="flex items-center gap-3">
-                                                    <div className="size-10 rounded-xl bg-red-50 text-red-500 flex items-center justify-center">
-                                                        <span className="material-symbols-outlined text-lg">shopping_cart</span>
-                                                    </div>
-                                                    <div>
-                                                        <p className="text-sm font-bold text-slate-800 group-hover:text-primary transition-colors">SEO Blog Tool</p>
-                                                        <p className="text-[11px] text-slate-400 font-medium mt-0.5">Prompt Purchase • 5d ago</p>
-                                                    </div>
-                                                </div>
-                                                <div className="text-right">
-                                                    <p className="text-sm font-bold text-red-500">-15.00</p>
-                                                    <p className="text-[10px] text-slate-400 uppercase font-bold">CR</p>
-                                                </div>
-                                            </div>
-                                        </div>
                                     </div>
-                                    <div className="p-6 bg-slate-50/50 flex flex-col items-center justify-center text-center">
+                                    <div className="p-4 sm:p-6 bg-slate-50/50 flex flex-col items-center justify-center text-center">
                                         <span className="material-symbols-outlined text-slate-300 mb-2">history</span>
                                         <p className="text-xs font-medium text-slate-400">Showing last 7 days of activity</p>
                                     </div>
@@ -415,8 +353,8 @@ export default function Profile() {
                         </div>
 
                         {/* Footer Stats / Meta Info */}
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                            <div className="bg-white p-4 sm:p-6 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4">
                                 <div className="size-12 rounded-full bg-slate-50 flex items-center justify-center text-slate-400">
                                     <span className="material-symbols-outlined">trending_down</span>
                                 </div>
@@ -425,7 +363,7 @@ export default function Profile() {
                                     <p className="text-xl font-bold text-slate-800">450.00 CR</p>
                                 </div>
                             </div>
-                            <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4">
+                            <div className="bg-white p-4 sm:p-6 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4">
                                 <div className="size-12 rounded-full bg-slate-50 flex items-center justify-center text-slate-400">
                                     <span className="material-symbols-outlined">payments</span>
                                 </div>
@@ -434,7 +372,7 @@ export default function Profile() {
                                     <p className="text-xl font-bold text-slate-800">{profileData.stats.creditsEarned} CR</p>
                                 </div>
                             </div>
-                            <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4">
+                            <div className="bg-white p-4 sm:p-6 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4">
                                 <div className="size-12 rounded-full bg-slate-50 flex items-center justify-center text-slate-400">
                                     <span className="material-symbols-outlined">auto_graph</span>
                                 </div>
@@ -445,19 +383,8 @@ export default function Profile() {
                             </div>
                         </div>
                     </div>
-                )}
-
-                {/* Settings Section */}
-                {activeSection === 'settings' && (
-                    <div className="bg-white rounded-2xl p-8 border border-slate-100">
-                        <h3 className="text-xl font-bold mb-6">Settings</h3>
-                        <div className="text-center py-12">
-                            <span className="material-symbols-outlined text-6xl text-slate-300 mb-4 block">settings</span>
-                            <p className="text-slate-500">Settings panel coming soon</p>
-                        </div>
-                    </div>
-                )}
-            </main>
+                </>
+            )}
         </div>
     );
 }
